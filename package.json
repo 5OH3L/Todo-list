@@ -1,0 +1,29 @@
+{
+  "name": "todo-list",
+  "version": "1.0.0",
+  "description": "Todo list app built using HTML, CSS, and JavaScript.",
+  "main": "./src/scripts/main.js",
+  "scripts": {
+    "build": "webpack --config webpack.prod.js",
+    "dev": "webpack serve --open --config webpack.dev.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/5OH3L/Todo-list.git"
+  },
+  "author": "Sohel",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/5OH3L/Todo-list/issues"
+  },
+  "homepage": "https://github.com/5OH3L/Todo-list#readme",
+  "devDependencies": {
+    "html-webpack-plugin": "^5.6.3",
+    "webpack": "^5.99.6",
+    "webpack-cli": "^6.0.1",
+    "webpack-merge": "^6.0.1"
+  },
+  "dependencies": {
+    "webpack-dev-server": "^5.2.1"
+  }
+}
