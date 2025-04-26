@@ -21,7 +21,7 @@ function addProject(name) {
 }
 
 class Task {
-    constructor(title, description, note, dueDate, dueTime, priority) {
+    constructor(title, description, note, dueDate, dueTime, priority, projectID = null) {
         this.title = title
         this.description = description
         this.note = note
@@ -29,21 +29,23 @@ class Task {
         this.dueTime = dueTime
         this.priority = priority
         this.isChecked = false
+        this.projectID = projectID
         this.ID = crypto.randomUUID()
     }
 }
-function createTask(title, description, note, dueDate, dueTime, priority) {
-    return new Task(title, description, note, dueDate, dueTime, priority)
+function createTask(title, description, note, dueDate, dueTime, priority, projectID) {
+    return new Task(title, description, note, dueDate, dueTime, priority, projectID)
 }
 function addTaskToTheProject(title, description, note, dueDate, dueTime, priority, projectID = 0) {
-    Projects.find(project => project.ID === projectID).tasks.push(createTask(title, description, note, dueDate, dueTime, priority))
+    const project = Projects.find(project => project.ID === projectID)
+    project.tasks.push(createTask(title, description, note, dueDate, dueTime, priority, projectID))
 }
 
-function findProject(ID){
+function findProject(ID) {
     return Projects.find(project => project.ID === ID)
 }
-function findTask(ID){
-    return Projects.filter(project => project.tasks.some(task => task.ID === ID))[0].tasks.filter(task => task.ID === ID)[0]
+function findTask(ID) {
+    return Projects.filter(project => project.tasks.some(task => task.ID === ID))[ 0 ].tasks.filter(task => task.ID === ID)[ 0 ]
 }
 
 const Todo = {
