@@ -1,4 +1,2 @@
 import Todo from './todo.js'
-
-Todo.AddTask("Title", "Description", "Note", "Due Date", "Due Time", "High")
-console.table(Todo.Projects)
+import Modify from './todo-modify.js'
