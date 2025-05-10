@@ -1,10 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo List</title>
 </head>
+
 <body>
+    <div id="content">
+        <aside id="sidebar">
+            <section id="sidebar-header">
+                <section id="user-info">
+                    <div id="user-logo"></div>
+                    <p id="user-name">SOHEL</p>
+                </section>
+                <button id="button-toggle-sidebar"><img title="Hide Sidebar" src="../icons/iconToggleSidebar.svg" alt="Toggle Sidebar Icon" class="icon"></button>
+            </section>
+            <section id="add-task">
+                <button id="button-add-task">Add Task</button>
+            </section>
+            <section id="filtered-tasks">
+                <h2 id="filtered-tasks-heading">Tasks</h2>
+                <div class="filtered-task" title="View All Tasks">
+                    <div class="filtered-task-icon"><img src="../icons/iconAllTasks.svg" alt="All Tasks Icon" class="icon"></div>
+                    <button class="filtered-task-title">All</button>
+                </div>
+                <div class="filtered-task" title="View Completed Tasks">
+                    <div class="filtered-task-icon"><img src="../icons/iconCompletedTasks.svg" alt="All Tasks Icon" class="icon"></div>
+                    <button class="filtered-task-title">Completed</button>
+                </div>
+                <div class="filtered-task" title="View Today's Tasks">
+                    <div class="filtered-task-icon"><img src="../icons/iconTodayTasks.svg" alt="Todays Tasks Icon" class="icon"></div>
+                    <button class="filtered-task-title">Today</button>
+                </div>
+                <div class="filtered-task" title="View Upcoming Tasks">
+                    <div class="filtered-task-icon"><img src="../icons/iconUpcomingTasks.svg" alt="Upcoming Tasks Icon" class="icon"></div>
+                    <button class="filtered-task-title">Upcoming</button>
+                </div>
+                <div class="filtered-task" title="View Missed Tasks">
+                    <div class="filtered-task-icon"><img src="../icons/iconMissedTasks.svg" alt="Missed Tasks Icon" class="icon"></div>
+                    <button class="filtered-task-title">Missed</button>
+                </div>
+                <div class="filtered-task" title="View Removed Tasks">
+                    <div class="filtered-task-icon"><img src="../icons/iconTrashTasks.svg" alt="Trashed Tasks Icon" class="icon"></div>
+                    <button class="filtered-task-title">Trash</button>
+                </div>
+            </section>
+            <section id="projects">
+                <div id="projects-heading">
+                    <button id="project-dropdown-button">
+                        <h2>Projects</h2>
+                        <div class="caret" title="Hide All Projects"><img src="../icons/iconProjectDropdown.svg" alt="Projet Drop-down Icon" class="icon"></div>
+                    </button>
+                </div>
+                <div id="all-projects-container">
+                    <div class="project">
+                        <div class="project-label-color"></div>
+                        <div class="project-title">Default Project</div>
+                        <div class="total-tasks-counter">0</div>
+                    </div>
+                </div>
+            </section>
+        </aside>
+        <div id="content-main">
+            <header id="header"></header>
+            <main id="main"></main>
+        </div>
+    </div>
 </body>
+
 </html>

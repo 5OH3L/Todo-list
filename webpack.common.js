@@ -8,6 +8,22 @@ module.exports = {
             template: './src/templates/template.html'
         }),
     ],
+    module: {
+        rules: [
+            {
+                test: /\.css$/i,
+                use: [ "style-loader", "css-loader" ],
+            },
+            {
+                test: /\.(png|svg|jpg|jpeg|gif|ttf)$/i,
+                type: "asset/resource",
+            },
+            {
+                test: /\.html$/i,
+                loader: "html-loader",
+            }
+        ],
+    },
     output: {
         filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist'),

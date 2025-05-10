@@ -1,0 +1,266 @@
+@font-face {
+    font-family: 'montserrat-bold';
+    src: url("../fonts/montserrat/Montserrat-Bold.ttf")
+}
+
+@font-face {
+    font-family: 'inter-bold';
+    src: url("../fonts/montserrat/Inter_28pt-Bold.ttf")
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --header-height: 10vh;
+    --primary-background-color: #1C1C1E;
+    --sidebar-padding: 0 1rem;
+}
+
+/* Layout */
+#content,
+#sidebar,
+#content-main {
+    height: 100vh;
+}
+
+#content {
+    display: flex;
+    width: 100%;
+}
+
+#sidebar {
+    flex: 1;
+}
+
+#content-main {
+    flex: 4;
+    display: flex;
+    flex-direction: column;
+}
+
+#header {
+    height: var(--header-height);
+}
+
+#main {
+    height: 100%;
+}
+
+/* Sidebar */
+#sidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    color: #ECECEC;
+    font-family: 'inter-bold', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: bold;
+    background-color: var(--primary-background-color);
+    gap: 1rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#sidebar>* {
+    width: 100%;
+    padding: var(--sidebar-padding);
+}
+
+#sidebar-header,
+#filtered-tasks,
+#projects {
+    width: 100%;
+}
+
+/* User Information */
+#sidebar-header {
+    height: var(--header-height);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--sidebar-padding);
+    gap: 1rem;
+}
+
+#user-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+#user-logo {
+    height: 2.5rem;
+    width: 2.5rem;
+    background-image: linear-gradient(-45deg, #62cff4, #2c67f2);
+    border-radius: 100%;
+    border: 2px solid white;
+}
+
+#user-name {
+    font-family: 'montserrat-bold', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-weight: bold;
+    letter-spacing: 0.2rem;
+}
+
+#button-toggle-sidebar {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+#button-toggle-sidebar>.icon {
+    height: 1.5rem;
+    width: 1.5rem;
+}
+
+/* Add Task Button */
+#button-add-task {
+    background: none;
+    border: none;
+    color: black;
+    font-family: inherit;
+    font-weight: inherit;
+    width: 100%;
+    background-color: #5D9FEB;
+    padding: 0.5rem 0;
+    font-size: 1rem;
+    border-radius: 0.3rem;
+    box-shadow: 0 0 10px 1px #0C0C0D;
+}
+
+/* Filtered Tasks */
+#filtered-tasks {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    gap: 0.5rem;
+}
+
+#filtered-tasks-heading {
+    text-align: start;
+    border-bottom: 1px solid #FFFFFF;
+    padding: 0.3rem 0;
+}
+
+.filtered-task {
+    background-color: #2A2F36;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    box-shadow: 0 2px 3px 1px #0C0C0D;
+}
+
+.filtered-task-title {
+    background: none;
+    border: none;
+    color: #7DA1CB;
+    font-family: inherit;
+    font-weight: inherit;
+    cursor: inherit;
+    font-size: 1rem;
+    padding: 0.4rem 0;
+}
+
+/* Projects */
+
+#projects {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 0;
+}
+
+#projects-heading {
+    padding: var(--sidebar-padding);
+}
+
+#projects-heading,
+#project-dropdown-button {
+    width: 100%;
+}
+
+#project-dropdown-button {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #FFFFFF;
+    text-align: start;
+    padding: 0.3rem 0;
+    color: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+}
+
+#all-projects-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    padding: var(--sidebar-padding);
+}
+
+.project {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333333;
+    padding: 0.4rem 0.5rem;
+    border-radius: 0.2rem;
+}
+
+.project-label-color {
+    height: 1.2rem;
+    width: 1.2rem;
+    background-color: white;
+    border-radius: 0.2rem;
+}
+
+.total-tasks-counter {
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight: bold;
+}
+
+/* Clickable Elements */
+#button-add-task,
+.filtered-task,
+#project-dropdown-button,
+.project {
+    cursor: pointer;
+}
+
+/* Icons */
+.filtered-task-icon {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    height: 100%;
+    padding-left: 0.5rem;
+}
+
+.filtered-task-icon>.icon,
+.caret>.icon {
+    height: 1.4rem;
+    width: 1.4rem;
+    filter: invert(1);
+}
