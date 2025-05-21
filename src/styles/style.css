@@ -5,7 +5,12 @@
 
 @font-face {
     font-family: 'inter-bold';
-    src: url("../fonts/montserrat/Inter_28pt-Bold.ttf")
+    src: url("../fonts/inter/Inter_28pt-Bold.ttf")
+}
+
+@font-face {
+    font-family: 'inter-regular';
+    src: url("../fonts/inter/Inter_28pt-regular.ttf")
 }
 
 *,
@@ -17,35 +22,41 @@
 }
 
 :root {
-    --header-height: 10vh;
+    --header-height: 4rem;
     --primary-background-color: #1C1C1E;
     --sidebar-padding: 0 1rem;
+    --primary-text-color: #ECECEC;
+    --primary-font-family: 'inter-bold', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    --secondary-font-family: 'montserrat-bold', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    --tertiary-font-family: 'inter-regular', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    --quaternary-font-family: Roboto, 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 /* Layout */
-#content,
-#sidebar,
-#content-main {
-    height: 100vh;
-}
-
 #content {
     display: flex;
+    overflow: hidden;
+    height: 100vh;
     width: 100%;
 }
 
 #sidebar {
-    flex: 1;
+    height: 100%;
+    width: 20vw;
+    flex-shrink: 0;
 }
 
 #content-main {
-    flex: 4;
     display: flex;
     flex-direction: column;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
 }
 
 #header {
     height: var(--header-height);
+    flex-shrink: 0;
 }
 
 #main {
@@ -59,13 +70,14 @@
     justify-content: flex-start;
     align-items: center;
     text-align: center;
-    color: #ECECEC;
-    font-family: 'inter-bold', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: var(--primary-text-color);
+    font-family: var(--primary-font-family);
     font-weight: bold;
     background-color: var(--primary-background-color);
     gap: 1rem;
     overflow-x: hidden;
     overflow-y: auto;
+    border-right: 0.19rem solid #2A2F36;
 }
 
 #sidebar>* {
@@ -85,8 +97,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--sidebar-padding);
-    gap: 1rem;
+    border-bottom: 0.125rem solid #2A2F36;
 }
 
 #user-info {
@@ -101,11 +112,11 @@
     width: 2.5rem;
     background-image: linear-gradient(-45deg, #62cff4, #2c67f2);
     border-radius: 100%;
-    border: 2px solid white;
+    border: 0.125rem solid white;
 }
 
 #user-name {
-    font-family: 'montserrat-bold', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-family: var(--secondary-font-family);
     font-weight: bold;
     letter-spacing: 0.2rem;
 }
@@ -236,6 +247,197 @@
 .total-tasks-counter {
     font-family: Arial, Helvetica, sans-serif;
     font-weight: bold;
+}
+
+/* Header */
+#header {
+    background-color: var(--primary-background-color);
+    color: var(--primary-text-color);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+    font-family: var(--primary-font-family);
+    padding-left: 1rem;
+}
+
+/* Main */
+#main {
+    background-color: #EAF6FF;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    flex: 1;
+}
+
+/* Sort */
+#sort-section {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--primary-font-family);
+    width: 100%;
+    margin-bottom: 0.5rem;
+    height: 3rem;
+}
+
+#sort-section>label {
+    font-size: 1.2rem;
+}
+
+#sort,
+#sort>option {
+    background-color: #212121;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 0.3rem;
+    border-radius: 0.4rem;
+}
+
+/* Tasks */
+#TasksSection {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#TasksSection>.task {
+    background-color: #FFFFFF;
+    border-radius: 0.5rem;
+    width: 100%;
+    height: minmax(20rem, max-content);
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: space-between;
+    gap: 1rem;
+    box-shadow: 2px 2px 4px 1px gray;
+}
+
+#TasksSection>.task>.details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+#TasksSection>.task>.details>.title {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+}
+
+#TasksSection>.task>.details>.title>.priority-indicator {
+    height: 30px;
+    width: 30px;
+    border: 0.3rem solid red;
+    border-radius: 100%;
+}
+
+#TasksSection>.task>.details>.title>.title-text {
+    font-family: var(--primary-font-family);
+    font-size: 1.5rem;
+}
+
+#TasksSection>.task>.details>.description>.description-text,
+#TasksSection>.task>.details>.note {
+    font-family: var(--quaternary-font-family);
+    font-size: 1.2rem;
+}
+
+#TasksSection>.task>.details>.note>.note-label {
+    font-weight: bold;
+}
+
+#TasksSection>.task>.details>.note {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 0.4rem;
+}
+
+#TasksSection>.task>.details>.priority-due-date-time {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    font-family: var(--quaternary-font-family);
+}
+
+#TasksSection>.task>.details>.priority-due-date-time>.priority,
+#TasksSection>.task>.details>.priority-due-date-time>.due-date-time {
+    display: flex;
+    width: 100%;
+    gap: 0.4rem;
+}
+
+#TasksSection>.task>.details>.priority-due-date-time>.priority {
+    justify-content: flex-start;
+}
+
+#TasksSection>.task>.details>.priority-due-date-time>.priority>.priority-label {
+    font-weight: bold;
+}
+
+#TasksSection>.task>.details>.priority-due-date-time>.due-date-time {
+    justify-content: flex-end;
+}
+
+#TasksSection>.task>.actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Delete Icon */
+.delete {
+    cursor: pointer;
+    height: 1.2rem;
+    width: 1.2rem;
+    background: none;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.delete>img,
+.re-order>img {
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+}
+
+.re-order {
+    height: 1.4rem;
+    width: 1.4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: grab;
+}
+
+.re-order:active {
+    cursor: grabbing;
 }
 
 /* Clickable Elements */
