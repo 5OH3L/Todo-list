@@ -8,26 +8,26 @@
 </head>
 
 <body>
-    <div id="content">
+    <div id="content" class="sidebarExpanded">
         <aside id="sidebar">
             <section id="sidebar-header">
                 <section id="user-info">
                     <div id="user-logo"></div>
                     <p id="user-name">SOHEL</p>
                 </section>
-                <button id="button-toggle-sidebar"><img title="Hide Sidebar" src="../icons/iconToggleSidebar.svg" alt="Toggle Sidebar Icon" class="icon"></button>
+                <button id="button-toggle-sidebar"><img title="Toggle Sidebar" src="../icons/iconToggleSidebar.svg" alt="Toggle Sidebar Icon" class="icon"></button>
             </section>
             <section id="add-task">
                 <button id="button-add-task">Add Task</button>
             </section>
             <section id="filtered-tasks">
                 <h2 id="filtered-tasks-heading">Tasks</h2>
-                <div class="filtered-task" title="View All Tasks">
+                <div class="filtered-task selected" title="View All Tasks">
                     <div class="filtered-task-icon"><img src="../icons/iconAllTasks.svg" alt="All Tasks Icon" class="icon"></div>
                     <button class="filtered-task-title">All</button>
                 </div>
                 <div class="filtered-task" title="View Completed Tasks">
-                    <div class="filtered-task-icon"><img src="../icons/iconCompletedTasks.svg" alt="All Tasks Icon" class="icon"></div>
+                    <div class="filtered-task-icon"><img src="../icons/iconCompletedTasks.svg" alt="Completed Tasks Icon" class="icon"></div>
                     <button class="filtered-task-title">Completed</button>
                 </div>
                 <div class="filtered-task" title="View Today's Tasks">
@@ -79,104 +79,101 @@
                     </select>
                 </section>
                 <section id="tasks-section">
-                    <div class="task">
+                    <div data-id="#" class="checked task">
                         <div class="details">
                             <div class="title">
-                                <div class="priority-indicator"></div>
+                                <div class="priority-indicator" style="border-color: red; background-color: red;"></div>
                                 <div class="title-text">Task Title</div>
+                                <div class="separator"></div>
                             </div>
-                            <div class="separator"></div>
-                            <div class="description">
-                                <div class="description-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur eius libero, soluta vero quam, commodi voluptatum aut iusto iste itaque earum perferendis consequatur unde nesciunt accusamus repellendus nulla omnis recusandae?</div>
-                            </div>
+                            <div class="description"><textarea name="description-text" class="description-text" spellcheck="false">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur eius libero, soluta vero quam, commodi voluptatum aut iusto iste itaque earum perferendis consequatur unde nesciunt accusamus repellendus nulla omnis recusandae?</textarea></div>
                             <div class="note non-collapsible">
-                                <div class="note-label">Note:</div>
-                                <div class="note-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui sed error accusantium ut cupiditate. Minus amet omnis nobis, enim veritatis sint est mollitia voluptatem quaerat.</div>
+                                <div class="note-label">Note:</div><textarea name="note-text" class="note-text" spellcheck="false">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur eius libero, soluta vero quam, commodi voluptatum aut iusto iste itaque earum perferendis consequatur unde nesciunt accusamus repellendus nulla omnis recusandae?</textarea>
                             </div>
                             <div class="priority-due-date-time">
-                                <div class="priority non-collapsible">
+                                <div class="priority non-collapsible"><select class="priority-input" name="priority-input">
+                                        <option value="3">High</option>
+                                        <option value="2">Medium</option>
+                                        <option value="1">Low</option>
+                                    </select>
                                     <div class="priority-label">Priority:</div>
-                                    <div class="priority-text">High</div>
+                                    <div class="priority-text">Medium</div>
                                 </div>
                                 <div class="due-date-time">
+                                    <input type="datetime-local" class="input-date-time" name="input-date-time" onclick="this.showPicker()">
                                     <div class="due-date-time-label">Due:</div>
-                                    <div class="due-date">9/6/2025</div>
+                                    <div class="due-date">6/4/2025</div>
                                     <div class="separator non-collapsible">-</div>
-                                    <div class="due-time non-collapsible">4:00 PM</div>
+                                    <div class="due-time non-collapsible">06:56 AM</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="actions">
-                            <button class="delete non-collapsible"><img src="../icons/iconCross.svg" alt="Cross Icon"></button>
-                            <button class="re-order"><img src="../icons/iconHorizontalDrag.svg" alt="Horizontal Drag Icon"></button>
-                        </div>
+                        <div class="actions"><button class="delete non-collapsible"><img src="../icons/iconCross.svg" alt="Cross Icon"></button><button class="re-order"><img src="../icons/iconHorizontalDrag.svg" alt="Horizontal Drag Icon"></button></div>
                     </div>
 
-                    <div class="task">
+                    <div data-id="#" class="task">
                         <div class="details">
                             <div class="title">
-                                <div class="priority-indicator"></div>
+                                <div class="priority-indicator" style="border-color: orange;"></div>
                                 <div class="title-text">Task Title</div>
+                                <div class="separator"></div>
                             </div>
-                            <div class="separator"></div>
-                            <div class="description">
-                                <div class="description-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur eius libero, soluta vero quam, commodi voluptatum aut iusto iste itaque earum perferendis consequatur unde nesciunt accusamus repellendus nulla omnis recusandae?</div>
-                            </div>
+                            <div class="description"><textarea name="description-text" class="description-text" spellcheck="false">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur eius libero, soluta vero quam, commodi voluptatum aut iusto iste itaque earum perferendis consequatur unde nesciunt accusamus repellendus nulla omnis recusandae?</textarea></div>
                             <div class="note non-collapsible">
-                                <div class="note-label">Note:</div>
-                                <div class="note-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui sed error accusantium ut cupiditate. Minus amet omnis nobis, enim veritatis sint est mollitia voluptatem quaerat.</div>
+                                <div class="note-label">Note:</div><textarea name="note-text" class="note-text" spellcheck="false">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur eius libero, soluta vero quam, commodi voluptatum aut iusto iste itaque earum perferendis consequatur unde nesciunt accusamus repellendus nulla omnis recusandae?</textarea>
                             </div>
                             <div class="priority-due-date-time">
-                                <div class="priority non-collapsible">
+                                <div class="priority non-collapsible"><select class="priority-input" name="priority-input">
+                                        <option value="3">High</option>
+                                        <option value="2">Medium</option>
+                                        <option value="1">Low</option>
+                                    </select>
                                     <div class="priority-label">Priority:</div>
-                                    <div class="priority-text">High</div>
+                                    <div class="priority-text">Medium</div>
                                 </div>
                                 <div class="due-date-time">
+                                    <input type="datetime-local" class="input-date-time" name="input-date-time" onclick="this.showPicker()">
                                     <div class="due-date-time-label">Due:</div>
-                                    <div class="due-date">9/6/2025</div>
+                                    <div class="due-date">6/4/2025</div>
                                     <div class="separator non-collapsible">-</div>
-                                    <div class="due-time non-collapsible">4:00 PM</div>
+                                    <div class="due-time non-collapsible">06:56 AM</div>
                                 </div>
                             </div>
                         </div>
-                        <div class="actions">
-                            <button class="delete non-collapsible"><img src="../icons/iconCross.svg" alt="Cross Icon"></button>
-                            <button class="re-order"><img src="../icons/iconHorizontalDrag.svg" alt="Horizontal Drag Icon"></button>
-                        </div>
-                    </div>
-                    <div class="task">
-                        <div class="details">
-                            <div class="title">
-                                <div class="priority-indicator"></div>
-                                <div class="title-text">Task Title</div>
-                            </div>
-                            <div class="separator"></div>
-                            <div class="description">
-                                <div class="description-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur eius libero, soluta vero quam, commodi voluptatum aut iusto iste itaque earum perferendis consequatur unde nesciunt accusamus repellendus nulla omnis recusandae?</div>
-                            </div>
-                            <div class="note non-collapsible">
-                                <div class="note-label">Note:</div>
-                                <div class="note-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Qui sed error accusantium ut cupiditate. Minus amet omnis nobis, enim veritatis sint est mollitia voluptatem quaerat.</div>
-                            </div>
-                            <div class="priority-due-date-time">
-                                <div class="priority non-collapsible">
-                                    <div class="priority-label">Priority:</div>
-                                    <div class="priority-text">High</div>
-                                </div>
-                                <div class="due-date-time">
-                                    <div class="due-date-time-label">Due:</div>
-                                    <div class="due-date">9/6/2025</div>
-                                    <div class="separator non-collapsible">-</div>
-                                    <div class="due-time non-collapsible">4:00 PM</div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="actions">
-                            <button class="delete non-collapsible"><img src="../icons/iconCross.svg" alt="Cross Icon"></button>
-                            <button class="re-order"><img src="../icons/iconHorizontalDrag.svg" alt="Horizontal Drag Icon"></button>
-                        </div>
+                        <div class="actions"><button class="delete non-collapsible"><img src="../icons/iconCross.svg" alt="Cross Icon"></button><button class="re-order"><img src="../icons/iconHorizontalDrag.svg" alt="Horizontal Drag Icon"></button></div>
                     </div>
 
+                    <div data-id="#" class="task">
+                        <div class="details">
+                            <div class="title">
+                                <div class="priority-indicator" style="border-color: greenyellow;"></div>
+                                <div class="title-text">Task Title</div>
+                                <div class="separator"></div>
+                            </div>
+                            <div class="description"><textarea name="description-text" class="description-text" spellcheck="false">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur eius libero, soluta vero quam, commodi voluptatum aut iusto iste itaque earum perferendis consequatur unde nesciunt accusamus repellendus nulla omnis recusandae?</textarea></div>
+                            <div class="note non-collapsible">
+                                <div class="note-label">Note:</div><textarea name="note-text" class="note-text" spellcheck="false">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur eius libero, soluta vero quam, commodi voluptatum aut iusto iste itaque earum perferendis consequatur unde nesciunt accusamus repellendus nulla omnis recusandae?</textarea>
+                            </div>
+                            <div class="priority-due-date-time">
+                                <div class="priority non-collapsible"><select class="priority-input" name="priority-input">
+                                        <option value="3">High</option>
+                                        <option value="2">Medium</option>
+                                        <option value="1">Low</option>
+                                    </select>
+                                    <div class="priority-label">Priority:</div>
+                                    <div class="priority-text">Medium</div>
+                                </div>
+                                <div class="due-date-time">
+                                    <input type="datetime-local" class="input-date-time" name="input-date-time" onclick="this.showPicker()">
+                                    <div class="due-date-time-label">Due:</div>
+                                    <div class="due-date">6/4/2025</div>
+                                    <div class="separator non-collapsible">-</div>
+                                    <div class="due-time non-collapsible">06:56 AM</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="actions"><button class="delete non-collapsible"><img src="../icons/iconCross.svg" alt="Cross Icon"></button><button class="re-order"><img src="../icons/iconHorizontalDrag.svg" alt="Horizontal Drag Icon"></button></div>
+                    </div>
                 </section>
             </main>
         </div>
