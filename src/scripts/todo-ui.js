@@ -95,7 +95,8 @@ function taskExpandListener(pointerEvent) {
 }
 function taskDeleteListener(pointerEvent){
     const task = pointerEvent.target.closest('.task')
-    const taskDeleteButton = pointerEvent.target
+    Todo.TrashTask(task.dataset.id)
+    loadAllTasks()
 }
 function initTaskEventListeners() {
     const tasks = Array.from(document.getElementsByClassName('task'))

@@ -5,6 +5,7 @@ const Projects = [
         tasks: []
     }
 ]
+const Trash = []
 
 function saveToLocalStorage() {
     const data = Projects.map(project => ({
@@ -88,7 +89,7 @@ function findProject(ID) {
     if (project) {
         return project
     } else {
-        throw new Error("Project not found")
+        return null
     }
 }
 function findTask(ID) {
@@ -118,19 +119,37 @@ function deleteTask(ID) {
     }
     saveToLocalStorage()
 }
-function moveTask(taskId, projectID){
+function moveTask(taskId, projectID) {
     const task = findTask(taskId)
     const taskProject = findProject(task.projectID)
-    const removedTask = taskProject.tasks.splice(taskProject.tasks.indexOf(taskId), 1)[0]
+    const removedTask = taskProject.tasks.splice(taskProject.tasks.indexOf(taskId), 1)[ 0 ]
     const newProject = findProject(projectID)
     removedTask.projectID = newProject.ID
     newProject.tasks.splice(0, 0, removedTask)
+}
+
+function moveTaskToTrash(taskId) {
+    const task = findTask(taskId)
+    const taskProject = findProject(task.projectID)
+    const removedTask = taskProject.tasks.splice(taskProject.tasks.indexOf(taskId), 1)[ 0 ]
+    Trash.splice(0, 0, removedTask)
+}
+function restoreTaskFromTrash(taskId){
+    const task = Trash.find(task => task.ID === taskId)
+    if(!task) return
+    const taskProject = findProject(task.projectID)
+    if(!(taskProject === null)){
+        const removedTask = Trash.splice(Trash.indexOf(task.ID), 1)[ 0 ]
+        taskProject.tasks.splice(0, 0, removedTask)
+    }
 }
 
 const Todo = {
     AddProject: addProject,
     AddTask: addTaskToTheProject,
     MoveTask: moveTask,
+    TrashTask: moveTaskToTrash,
+    RestoreTask: restoreTaskFromTrash,
     Find: {
         Project: findProject,
         Task: findTask
@@ -140,6 +159,7 @@ const Todo = {
         Task: deleteTask
     },
     Projects,
+    Trash,
     Save: saveToLocalStorage,
     Load: loadFromLocalStorage
 }
