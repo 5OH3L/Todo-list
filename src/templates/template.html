@@ -177,6 +177,45 @@
                 </section>
             </main>
         </div>
+        <div id="taskInputContainer">
+            <div id="taskInputOverlay"></div>
+            <div id="taskInput">
+                <h2 id="taskInputHeading">Enter Task Details</h2>
+                <div id="taskInpuTitleContainer">
+                    <label for="taskInputTitle" id="taskInputTitleLabel">Title:</label>
+                    <input type="text" id="taskInputTitle" name="taskInputTitle">
+                </div>
+                <div id="taskInputDescriptionContainer">
+                    <label for="taskInputDescription" id="taskInputDescriptionLabel">Description:</label>
+                    <textarea id="taskInputDescription" name="taskInputDescription"></textarea>
+                </div>
+                <div id="taskInputNoteContainer">
+                    <label for="taskInputNote" id="taskInputNoteLabel">Note:</label>
+                    <textarea id="taskInputNote" name="taskInputNote"></textarea>
+                </div>
+                <div id="taskInputPriorityContainer">
+                    <label for="taskInputPriority" id="taskInputPriorityLabel">Priority:</label>
+                    <select id="taskInputPriority" name="taskInputPriority">
+                        <option value="3">High</option>
+                        <option value="2">Medium</option>
+                        <option value="1">Low</option>
+                    </select>
+                </div>
+                <div id="taskInputDueDateTimeContainer">
+                    <label for="taskInputDueDateTime" id="taskInputDueDateTimeLabel">Due Date & Time:</label>
+                    <input type="datetime-local" id="taskInputDueDateTime" name="taskInputDueDateTime" onclick="this.showPicker()">
+                </div>
+                <div id="taskInputProjectContainer">
+                    <label for="taskInputProject" id="taskInputProjectLabel">In Project:</label>
+                    <select id="taskInputProject" name="taskInputProject">
+                    </select>
+                </div>
+                <div id="taskInputActionButtons">
+                    <button id="taskInputDiscardButton">Discard</button>
+                    <button id="taskInputAddButton">Add</button>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 

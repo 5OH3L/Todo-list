@@ -2,8 +2,31 @@ import iconTaskDelete from '../icons/iconCross.svg'
 import iconTaskReOrder from '../icons/iconHorizontalDrag.svg'
 import Todo from "./todo"
 
-function init() {
-    // Toggle task expand
+function initProjects() {
+    const projectsContainer = document.getElementById('all-projects-container')
+    Todo.Projects.forEach(project => {
+        projectsContainer.innerHTML = ''
+        const DOMProject = document.createElement('div')
+        DOMProject.classList.add('project')
+        DOMProject.dataset.ID = project.ID
+        projectsContainer.appendChild(DOMProject)
+
+        const DOMProjectLabelColor = document.createElement('div')
+        DOMProjectLabelColor.classList.add('project-label-color')
+        DOMProject.appendChild(DOMProjectLabelColor)
+
+        const DOMProjectTitle = document.createElement('div')
+        DOMProjectTitle.classList.add('project-title')
+        DOMProjectTitle.textContent = project.name
+        DOMProject.appendChild(DOMProjectTitle)
+
+        const DOMProjectTotalTasksCounter = document.createElement('div')
+        DOMProjectTotalTasksCounter.classList.add('total-tasks-counter')
+        DOMProjectTotalTasksCounter.textContent = project.tasks.length
+        DOMProject.appendChild(DOMProjectTotalTasksCounter)
+    })
+}
+function initTaskCollapse() {
     const tasks = Array.from(document.getElementsByClassName('task'))
     const mainSection = document.getElementById('main')
     mainSection.addEventListener('click', e => {
@@ -46,33 +69,47 @@ function init() {
             })
         }
     })
+}
+function taskCheckListener(pointerEvent) {
+    const task = pointerEvent.target.closest('.task')
+    const taskCheckbox = pointerEvent.target
+    if (task.classList.contains('checked')) {
+        Todo.Find.Task(task.dataset.id).isChecked = false
+        task.classList.remove('checked')
+        taskCheckbox.style.backgroundColor = ''
+    } else {
+        Todo.Find.Task(task.dataset.id).isChecked = true
+        task.classList.add('checked')
+        taskCheckbox.style.backgroundColor = taskCheckbox.style.borderColor
+    }
+    Todo.Save()
+}
+function taskExpandListener(pointerEvent) {
+    if (pointerEvent.target.classList.contains('priority-indicator')) return
+    const task = pointerEvent.target.closest('.task')
+    task.closest('.task').classList.add("expanded")
+    const taskDescriptionText = task.getElementsByClassName('description-text')[ 0 ]
+    const taskNoteText = task.getElementsByClassName('note-text')[ 0 ]
+    taskDescriptionText.readOnly = false
+    taskNoteText.readOnly = false
+}
+function taskDeleteListener(pointerEvent){
+    const task = pointerEvent.target.closest('.task')
+    const taskDeleteButton = pointerEvent.target
+}
+function initTaskEventListeners() {
+    const tasks = Array.from(document.getElementsByClassName('task'))
     tasks.forEach(task => {
-        task.addEventListener('click', e => {
-            if (e.target.classList.contains('priority-indicator')) return
-            task.classList.add("expanded")
-            const taskDescriptionText = task.getElementsByClassName('description-text')[ 0 ]
-            const taskNoteText = task.getElementsByClassName('note-text')[ 0 ]
-            taskDescriptionText.readOnly = false
-            taskNoteText.readOnly = false
-        })
+        task.addEventListener('click', taskExpandListener)
         // Check Task
         const taskCheckbox = task.getElementsByClassName('priority-indicator')[ 0 ]
-        taskCheckbox.addEventListener('click', e => {
-            if (task.classList.contains('checked')) {
-                Todo.Find.Task(task.dataset.id).isChecked = false
-                console.log(Todo.Find.Task(task.dataset.id))
-                task.classList.remove('checked')
-                taskCheckbox.style.backgroundColor = ''
-            } else {
-                Todo.Find.Task(task.dataset.id).isChecked = true
-                console.log(Todo.Find.Task(task.dataset.id))
-                task.classList.add('checked')
-                taskCheckbox.style.backgroundColor = taskCheckbox.style.borderColor
-            }
-            Todo.Save()
-        })
+        taskCheckbox.addEventListener('click', taskCheckListener)
+        // Delete Task
+        const taskDeleteButton = task.getElementsByClassName('delete')[0]
+        taskDeleteButton.addEventListener('click', taskDeleteListener)
     })
-    // Toggle sidebar show
+}
+function initSidebarToggle() {
     const content = document.getElementById('content')
     const toggleSidebarButton = document.getElementById('button-toggle-sidebar')
     toggleSidebarButton.addEventListener('click', e => {
@@ -82,6 +119,66 @@ function init() {
             content.classList.add('sidebarExpanded')
         }
     })
+}
+function initTaskInputPopup() {
+    const showAddTaskButton = document.getElementById('button-add-task')
+    const taskInputContainer = document.getElementById('taskInputContainer')
+    const taskInputTitle = document.getElementById('taskInputTitle')
+    const taskInputDescription = document.getElementById('taskInputDescription')
+    const taskInputNote = document.getElementById('taskInputNote')
+    const taskInputPriority = document.getElementById('taskInputPriority')
+    const taskInputDueDateTime = document.getElementById('taskInputDueDateTime')
+    const taskInputs = [ taskInputTitle, taskInputDescription, taskInputNote, taskInputPriority, taskInputDueDateTime ]
+    const discardTaskButton = document.getElementById('taskInputDiscardButton')
+    const addTaskButton = document.getElementById('taskInputAddButton')
+    const taskInputProject = document.getElementById('taskInputProject')
+    Todo.Projects.forEach(project => {
+        const projectName = document.createElement('option')
+        projectName.value = project.ID
+        projectName.textContent = project.name
+        taskInputProject.appendChild(projectName)
+    })
+
+    showAddTaskButton.addEventListener('click', () => {
+        const currentDate = new Date()
+        taskInputDueDateTime.value = currentDate.toISOString().slice(0, 10) + 'T' + currentDate.toTimeString().slice(0, 5)
+        taskInputContainer.classList.add('visible')
+    })
+    discardTaskButton.addEventListener('click', () => {
+        taskInputs.forEach(input => {
+            if (input.id === "taskInputPriority") { } else { input.value = '' }
+            if (input.id === "taskInputDueDateTime") taskInputDueDateTime.value = ""
+        })
+        taskInputContainer.classList.remove('visible')
+    })
+    addTaskButton.addEventListener('click', () => {
+        if (taskInputTitle.value.trim() === "") {
+            alert("Title can't be empty!")
+            return
+        }
+        if (taskInputDueDateTime.value.trim() === "") {
+            alert("You must select due date & time!")
+            return
+        }
+        Todo.AddTask(taskInputTitle.value.trim(), taskInputDescription.value.trim(), taskInputNote.value.trim(), Number(taskInputPriority.value), new Date(taskInputDueDateTime.value), taskInputProject.value)
+        taskInputs.forEach(input => {
+            if (input.id === "taskInputPriority") { } else { input.value = '' }
+        })
+        taskInputContainer.classList.remove('visible')
+        loadAllTasks()
+        initTaskEventListeners()
+    })
+    const taskInput = document.getElementById('taskInput')
+    taskInput.classList.add('taskInputTransiton')
+    const taskInputOverlay = document.getElementById('taskInputOverlay')
+    taskInputOverlay.classList.add('taskInputOverlayTransiton')
+}
+function init() {
+    initProjects()
+    initTaskCollapse()
+    initTaskEventListeners()
+    initSidebarToggle()
+    initTaskInputPopup()
 }
 
 function loadAllTasks() {
@@ -277,7 +374,14 @@ function loadAllTasks() {
 }
 
 const todoUI = {
-    init,
+    init: {
+        all: init,
+        projects: initProjects,
+        taskCollapse: initTaskCollapse,
+        taskEventListener: initTaskEventListeners,
+        sidebar: initSidebarToggle,
+        taskInput: initTaskInputPopup,
+    },
     load: {
         allTasks: loadAllTasks
     }

@@ -849,3 +849,130 @@
 .filtered-task.selected {
     background-color: hsl(217, 14%, 30%);
 }
+
+/* Task Input */
+#taskInputContainer{
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+    user-select: none;
+}
+#taskInputContainer>#taskInputOverlay{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(0.1rem);
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
+    transition: opacity 0.5s ease;
+}
+#taskInputContainer.visible>#taskInputOverlay{
+    opacity: 1;
+    pointer-events: all;
+}
+#taskInputContainer>#taskInput{
+    position: absolute;
+    height: 80svh;
+    width: 80svh;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 0.4rem;
+    backdrop-filter: blur(0.2rem);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 1rem;
+    font-family: var(--secondary-font-family);
+    user-select: none;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-150%);
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+#taskInputContainer.visible>#taskInput{
+    pointer-events: all;
+    opacity: 1;
+    transform: translateY(0%);
+}
+#taskInputHeading{
+    align-self: center;
+}
+#taskInputContainer>#taskInput>*:not(#taskInputHeading,#taskInputActionButtons){
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
+#taskInputContainer>#taskInput>*:not(#taskInputHeading,#taskInputActionButtons)>:first-child{
+    white-space: nowrap;
+    width: 60%;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+#taskInputContainer>#taskInput>*:not(#taskInputHeading,#taskInputActionButtons)>:nth-child(2){
+    width: 100%;
+    height: 3rem;
+    border: none;
+    outline: none;
+    border-radius: 0.4rem;
+    resize: none;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+    padding: 0.5rem;
+    font-size: 1rem;
+    font-family: inherit;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: border-color 0.5s ease;
+}
+#taskInputContainer>#taskInput>*:not(#taskInputHeading,#taskInputActionButtons)>:nth-child(2):hover{
+    border-color: hsl(212, 30%, 65%);
+}
+#taskInputContainer>#taskInput>*:not(#taskInputHeading,#taskInputActionButtons)>:nth-child(2):focus{
+    border-color: #7DA1CB;
+}
+#taskInputContainer>#taskInput>#taskInputActionButtons{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    font-size: 1.2rem;
+    gap: 1rem;
+}
+#taskInputContainer>#taskInput>#taskInputActionButtons>#taskInputDiscardButton,
+#taskInputContainer>#taskInput>#taskInputActionButtons>#taskInputAddButton{
+    font-size: inherit;
+    width: 30%;
+    border: none;
+    outline: none;
+    border-radius: 0.4rem;
+    padding: 0.5rem 1rem;
+    background-color: #EAF6FF;
+    color: black    ;
+    border: 2px solid black;
+    cursor: pointer;
+    transition: transform 0.5s ease;
+}
+#taskInputContainer>#taskInput>#taskInputActionButtons>#taskInputDiscardButton:hover,
+#taskInputContainer>#taskInput>#taskInputActionButtons>#taskInputAddButton:hover{
+    transform: scale(1.1);
+}
+#taskInputContainer>#taskInput>#taskInputActionButtons>#taskInputDiscardButton:active,
+#taskInputContainer>#taskInput>#taskInputActionButtons>#taskInputAddButton:active{
+    transform: scale(1.05);
+}
+#taskInputPriority{
+    position: relative;
+}
