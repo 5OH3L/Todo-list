@@ -309,6 +309,9 @@
     padding-left: 1rem;
     flex-shrink: 0;
 }
+#header>#currentTab{
+    text-transform: capitalize;
+}
 
 /* Main */
 #main {
@@ -363,6 +366,15 @@
     scrollbar-gutter: stable both-edges;
 }
 
+@keyframes fadeIn {
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+    }
+}
+
 #tasks-section>.task {
     background-color: #FFFFFF;
     border-radius: 0.5rem;
@@ -376,6 +388,7 @@
     height: 4rem;
     box-shadow: 2px 2px 4px 1px gray;
     cursor: pointer;
+    animation: fadeIn 0.5s ease;
     transition: height 0.5s ease;
 }
 
@@ -975,4 +988,72 @@
 }
 #taskInputPriority{
     position: relative;
+}
+/* Task Message */
+#taskMessageContainer{
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    user-select: none;
+}
+#taskMessageContainer>#taskMessageWrapper{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 1rem;
+    height: max-content;
+    min-height: 40svh;
+    width: max-content;
+    max-width: 60svh;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    padding: 1rem;
+    border-radius: 0.4rem;
+    pointer-events: all;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(0.1rem);
+    color: white;
+    opacity: 0;
+    transform: translateY(-200%);
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+#taskMessageContainer.visible>#taskMessageWrapper{
+    opacity: 1;
+    transform: translateY(0%);
+}
+#taskMessageContainer>#taskMessageWrapper>#taskMessageHeading{
+    font-family:var(--primary-font-family);
+    font-size: 2rem;
+}
+#taskMessageContainer>#taskMessageWrapper>#taskMessage{
+    user-select:text;
+    font-size: 1.5rem;
+}
+#taskMessageContainer>#taskMessageWrapper>#taskMessageActions{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+#taskMessageContainer>#taskMessageWrapper>#taskMessageActions>button{
+    background: none;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 0.6rem 1.4rem;
+    border-radius: 0.4rem;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+#taskMessageContainer>#taskMessageWrapper>#taskMessageActions>button:hover{
+    transform: scale(1.1);
+}
+#taskMessageContainer>#taskMessageWrapper>#taskMessageActions>button:active{
+    transform: scale(1.05);
 }

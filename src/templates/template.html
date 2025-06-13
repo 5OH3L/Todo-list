@@ -20,29 +20,29 @@
             <section id="add-task">
                 <button id="button-add-task">Add Task</button>
             </section>
-            <section id="filtered-tasks">
+            <section id="filtered-tasks" data-filter="all">
                 <h2 id="filtered-tasks-heading">Tasks</h2>
-                <div class="filtered-task selected" title="View All Tasks">
+                <div class="filtered-task selected" title="View All Tasks" data-filter="all">
                     <div class="filtered-task-icon"><img src="../icons/iconAllTasks.svg" alt="All Tasks Icon" class="icon"></div>
                     <button class="filtered-task-title">All</button>
                 </div>
-                <div class="filtered-task" title="View Completed Tasks">
+                <div class="filtered-task" title="View Completed Tasks" data-filter="completed">
                     <div class="filtered-task-icon"><img src="../icons/iconCompletedTasks.svg" alt="Completed Tasks Icon" class="icon"></div>
                     <button class="filtered-task-title">Completed</button>
                 </div>
-                <div class="filtered-task" title="View Today's Tasks">
+                <div class="filtered-task" title="View Today's Tasks" data-filter="today">
                     <div class="filtered-task-icon"><img src="../icons/iconTodayTasks.svg" alt="Todays Tasks Icon" class="icon"></div>
                     <button class="filtered-task-title">Today</button>
                 </div>
-                <div class="filtered-task" title="View Upcoming Tasks">
+                <div class="filtered-task" title="View Upcoming Tasks" data-filter="upcoming">
                     <div class="filtered-task-icon"><img src="../icons/iconUpcomingTasks.svg" alt="Upcoming Tasks Icon" class="icon"></div>
                     <button class="filtered-task-title">Upcoming</button>
                 </div>
-                <div class="filtered-task" title="View Missed Tasks">
+                <div class="filtered-task" title="View Missed Tasks" data-filter="missed">
                     <div class="filtered-task-icon"><img src="../icons/iconMissedTasks.svg" alt="Missed Tasks Icon" class="icon"></div>
                     <button class="filtered-task-title">Missed</button>
                 </div>
-                <div class="filtered-task" title="View Removed Tasks">
+                <div class="filtered-task" title="View Removed Tasks" data-filter="trash">
                     <div class="filtered-task-icon"><img src="../icons/iconTrashTasks.svg" alt="Trashed Tasks Icon" class="icon"></div>
                     <button class="filtered-task-title">Trash</button>
                 </div>
@@ -213,6 +213,16 @@
                 <div id="taskInputActionButtons">
                     <button id="taskInputDiscardButton">Discard</button>
                     <button id="taskInputAddButton">Add</button>
+                </div>
+            </div>
+        </div>
+        <div id="taskMessageContainer">
+            <div id="taskMessageWrapper">
+                <h2 id="taskMessageHeading">Are you sure?</h2>
+                <p id="taskMessage"></p>
+                <div id="taskMessageActions">
+                    <button id="taskMessageCancel">Cancel</button>
+                    <button id="taskMessageConfirm">Confirm</button>
                 </div>
             </div>
         </div>

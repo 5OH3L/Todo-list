@@ -12,22 +12,49 @@ function saveToLocalStorage() {
         ...project,
         tasks: project.tasks.map(task => ({
             ...task,
+            creationDateTime: task.creationDateTime.toISOString(),
             dueDateTime: task.dueDateTime.toISOString()
         }))
     }))
+    const trashData = Trash.map(task => ({
+        ...task,
+        creationDateTime: task.creationDateTime.toISOString(),
+        dueDateTime: task.dueDateTime.toISOString()
+    }))
     localStorage.setItem("todoProjects", JSON.stringify(data))
+    localStorage.setItem("todoTrash", JSON.stringify(trashData))
 }
 function loadFromLocalStorage() {
-    const data = JSON.parse(localStorage.getItem("todoProjects"))
-    if (!data) return
+    const projectData = JSON.parse(localStorage.getItem("todoProjects"))
+    const trashData = JSON.parse(localStorage.getItem("todoTrash"))
+    if (projectData) {
+        Projects.length = 0
+        projectData.forEach(data => {
+            const project = new Project(data.name)
+            project.ID = data.ID
 
-    Projects.length = 0
+            project.tasks = data.tasks.map(taskData => {
+                const task = new Task(
+                    taskData.title,
+                    taskData.description,
+                    taskData.note,
+                    taskData.priority,
+                    new Date(taskData.dueDateTime),
+                    taskData.projectID
+                )
+                task.ID = taskData.ID
+                task.creationDateTime = new Date(taskData.creationDateTime)
+                task.isChecked = taskData.isChecked
+                return task
+            })
 
-    data.forEach(projectData => {
-        const project = new Project(projectData.name)
-        project.ID = projectData.ID
+            Projects.push(project)
+        })
+    }
 
-        project.tasks = projectData.tasks.map(taskData => {
+    if (trashData) {
+        Trash.length = 0
+        trashData.forEach(taskData => {
             const task = new Task(
                 taskData.title,
                 taskData.description,
@@ -39,11 +66,10 @@ function loadFromLocalStorage() {
             task.ID = taskData.ID
             task.creationDateTime = new Date(taskData.creationDateTime)
             task.isChecked = taskData.isChecked
-            return task
+            task.isTrashed = taskData.isTrashed
+            Trash.push(task)
         })
-
-        Projects.push(project)
-    })
+    }
 }
 
 
@@ -68,11 +94,12 @@ class Task {
         this.description = description
         this.note = note
         this.priority = priority
-        this.creationDateTime = new Date().toISOString()
+        this.creationDateTime = new Date()
         this.dueDateTime = dueDateTime
         this.projectID = projectID
         this.ID = crypto.randomUUID()
         this.isChecked = false
+        this.isTrashed = false
     }
 }
 function createTask(title, description, note, priority, dueDateTime, projectID = null) {
@@ -97,6 +124,8 @@ function findTask(ID) {
         const task = project.tasks.find(task => task.ID === ID)
         if (task) return task
     }
+    const trashedTask = Trash.find(task => task.ID === ID)
+    if (trashedTask) return trashedTask
     return null
 }
 function deleteProject(ID) {
@@ -111,11 +140,8 @@ function deleteProject(ID) {
 function deleteTask(ID) {
     const task = findTask(ID)
     if (task) {
-        const project = Projects.find(project => project.ID === task.projectID)
-        if (project) {
-            const taskIndex = project.tasks.indexOf(task)
-            project.tasks.splice(taskIndex, 1)
-        }
+        const taskIndex = Trash.indexOf(task)
+        Trash.splice(taskIndex, 1)
     }
     saveToLocalStorage()
 }
@@ -127,18 +153,22 @@ function moveTask(taskId, projectID) {
     removedTask.projectID = newProject.ID
     newProject.tasks.splice(0, 0, removedTask)
 }
-
 function moveTaskToTrash(taskId) {
     const task = findTask(taskId)
+    if(task.isTrashed) return
     const taskProject = findProject(task.projectID)
-    const removedTask = taskProject.tasks.splice(taskProject.tasks.indexOf(taskId), 1)[ 0 ]
+    const taskIndex = taskProject.tasks.indexOf(task)
+    if (taskIndex < 0) return
+    const removedTask = taskProject.tasks.splice(taskIndex, 1)[ 0 ]
+    removedTask.isTrashed = true
     Trash.splice(0, 0, removedTask)
+    saveToLocalStorage()
 }
-function restoreTaskFromTrash(taskId){
+function restoreTaskFromTrash(taskId) {
     const task = Trash.find(task => task.ID === taskId)
-    if(!task) return
+    if (!task) return
     const taskProject = findProject(task.projectID)
-    if(!(taskProject === null)){
+    if (!(taskProject === null)) {
         const removedTask = Trash.splice(Trash.indexOf(task.ID), 1)[ 0 ]
         taskProject.tasks.splice(0, 0, removedTask)
     }
