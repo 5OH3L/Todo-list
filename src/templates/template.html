@@ -51,7 +51,10 @@
                 <div id="projects-heading">
                     <button id="project-dropdown-button">
                         <h2>Projects</h2>
-                        <div class="caret" title="Hide All Projects"><img src="../icons/iconProjectDropdown.svg" alt="Projet Drop-down Icon" class="icon"></div>
+                        <div class="project-actions">
+                            <div id="add-project" class="add-project" title="Create Project"><img src="../icons/iconCreateProject.svg" alt="Create Projet Icon" class="icon"></div>
+                            <div class="caret" title="Hide All Projects"><img src="../icons/iconProjectDropdown.svg" alt="Projet Drop-down Icon" class="icon"></div>
+                        </div>
                     </button>
                 </div>
                 <div id="all-projects-container">
@@ -207,12 +210,29 @@
                 </div>
                 <div id="taskInputProjectContainer">
                     <label for="taskInputProject" id="taskInputProjectLabel">In Project:</label>
-                    <select id="taskInputProject" name="taskInputProject">
-                    </select>
+                    <select id="taskInputProject" name="taskInputProject"></select>
                 </div>
                 <div id="taskInputActionButtons">
                     <button id="taskInputDiscardButton">Discard</button>
                     <button id="taskInputAddButton">Add</button>
+                </div>
+            </div>
+        </div>
+        <div id="projectInputContainer">
+            <div id="projectInputOverlay"></div>
+            <div id="projectInput">
+                <h2 id="projectInputHeading">Enter Project Details</h2>
+                <div id="projectInputNameContainer">
+                    <label for="projectInputName" id="projectInputNameLabel">Name:</label>
+                    <input type="text" id="projectInputName">
+                </div>
+                <div id="projectInputColorContainer">
+                    <label for="projectInputColor" id="projectInputColorLabel">Color:</label>
+                    <input type="color" id="projectInputColor" value="#FFFFFF">
+                </div>
+                <div id="projectInputActions">
+                    <button id="projectInputCancel">Cancel</button>
+                    <button id="projectInputCreate">Create</button>
                 </div>
             </div>
         </div>

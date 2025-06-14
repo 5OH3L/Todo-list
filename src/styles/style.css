@@ -72,7 +72,9 @@
     font-weight: bold;
     background-color: var(--primary-background-color);
     gap: 1rem;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-bottom: 1rem;
     border-right: 0.19rem solid #2A2F36;
     scrollbar-gutter: stable both-edges;
     width: 0;
@@ -186,9 +188,10 @@
     align-items: center;
     background-color: #2A2F36;
     box-shadow: 0 2px 3px 1px #0C0C0D;
+    transition: background-color 0.2s ease;
 }
 
-.filtered-task:hover {
+.filtered-task:not(.selected):hover {
     background-color: hsl(217, 14%, 25%);
 }
 
@@ -211,7 +214,6 @@
 .filtered-task-icon>img {
     height: 100%;
     width: 100%;
-    filter: invert(1);
 }
 
 .filtered-task-title {
@@ -258,10 +260,29 @@
     padding: 0.3rem 0;
 }
 
+.project-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.add-project>.icon {
+    transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+.add-project>.icon:hover {
+    opacity: 0.8;
+}
+
+.add-project>.icon:active {
+    transform: scale(0.9);
+}
+
+.add-project>.icon,
 .caret>.icon {
     height: 1.4rem;
     width: 1.4rem;
-    filter: invert(1);
 }
 
 #all-projects-container {
@@ -281,6 +302,15 @@
     background-color: #333333;
     padding: 0.4rem 0.5rem;
     border-radius: 0.2rem;
+    transition: background-color 0.2s ease;
+}
+
+.project.selected {
+    background-color: hsl(0, 0%, 27%);
+}
+
+.project:not(.selected):hover {
+    background-color: hsl(0, 0%, 25%);
 }
 
 .project-label-color {
@@ -309,7 +339,8 @@
     padding-left: 1rem;
     flex-shrink: 0;
 }
-#header>#currentTab{
+
+#header>#currentTab {
     text-transform: capitalize;
 }
 
@@ -367,10 +398,11 @@
 }
 
 @keyframes fadeIn {
-    from{
+    from {
         opacity: 0;
     }
-    to{
+
+    to {
         opacity: 1;
     }
 }
@@ -628,13 +660,13 @@
     width: 100%;
     position: absolute;
     opacity: 0;
+    cursor: pointer;
 }
 
 #tasks-section>.task.expanded>.details>.priority-due-date-time>.priority>.priority-input {
     background-color: black;
     color: white;
     text-align: center;
-    cursor: pointer;
 }
 
 #tasks-section>.task>.details>.priority-due-date-time>.priority>.priority-label {
@@ -693,6 +725,7 @@
 /* Clickable Elements */
 #button-add-task,
 .filtered-task,
+#button-create-project,
 #project-dropdown-button,
 .project {
     cursor: pointer;
@@ -864,7 +897,7 @@
 }
 
 /* Task Input */
-#taskInputContainer{
+#taskInputContainer {
     position: fixed;
     display: flex;
     justify-content: center;
@@ -874,7 +907,8 @@
     pointer-events: none;
     user-select: none;
 }
-#taskInputContainer>#taskInputOverlay{
+
+#taskInputContainer>#taskInputOverlay {
     position: absolute;
     height: 100%;
     width: 100%;
@@ -885,11 +919,13 @@
     user-select: none;
     transition: opacity 0.5s ease;
 }
-#taskInputContainer.visible>#taskInputOverlay{
+
+#taskInputContainer.visible>#taskInputOverlay {
     opacity: 1;
     pointer-events: all;
 }
-#taskInputContainer>#taskInput{
+
+#taskInputContainer>#taskInput {
     position: absolute;
     height: 80svh;
     width: 80svh;
@@ -909,28 +945,33 @@
     transform: translateY(-150%);
     transition: transform 0.5s ease, opacity 0.5s ease;
 }
-#taskInputContainer.visible>#taskInput{
+
+#taskInputContainer.visible>#taskInput {
     pointer-events: all;
     opacity: 1;
     transform: translateY(0%);
 }
-#taskInputHeading{
+
+#taskInputHeading {
     align-self: center;
 }
-#taskInputContainer>#taskInput>*:not(#taskInputHeading,#taskInputActionButtons){
+
+#taskInputContainer>#taskInput>*:not(#taskInputHeading, #taskInputActionButtons) {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     gap: 1rem;
     width: 100%;
 }
-#taskInputContainer>#taskInput>*:not(#taskInputHeading,#taskInputActionButtons)>:first-child{
+
+#taskInputContainer>#taskInput>*:not(#taskInputHeading, #taskInputActionButtons)>:first-child {
     white-space: nowrap;
     width: 60%;
     font-size: 1.2rem;
     cursor: pointer;
 }
-#taskInputContainer>#taskInput>*:not(#taskInputHeading,#taskInputActionButtons)>:nth-child(2){
+
+#taskInputContainer>#taskInput>*:not(#taskInputHeading, #taskInputActionButtons)>:nth-child(2) {
     width: 100%;
     height: 3rem;
     border: none;
@@ -950,13 +991,21 @@
     cursor: pointer;
     transition: border-color 0.5s ease;
 }
-#taskInputContainer>#taskInput>*:not(#taskInputHeading,#taskInputActionButtons)>:nth-child(2):hover{
+
+#taskInputContainer>#taskInput>*:not(#taskInputHeading, #taskInputActionButtons)>:nth-child(2):hover {
     border-color: hsl(212, 30%, 65%);
 }
-#taskInputContainer>#taskInput>*:not(#taskInputHeading,#taskInputActionButtons)>:nth-child(2):focus{
+
+#taskInputContainer>#taskInput>*:not(#taskInputHeading, #taskInputActionButtons)>:nth-child(2):focus {
     border-color: #7DA1CB;
 }
-#taskInputContainer>#taskInput>#taskInputActionButtons{
+
+#taskInputProject>option{
+    background-color: black;
+    cursor: pointer;
+}
+
+#taskInputContainer>#taskInput>#taskInputActionButtons {
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -964,8 +1013,9 @@
     font-size: 1.2rem;
     gap: 1rem;
 }
-#taskInputContainer>#taskInput>#taskInputActionButtons>#taskInputDiscardButton,
-#taskInputContainer>#taskInput>#taskInputActionButtons>#taskInputAddButton{
+
+#taskInputDiscardButton,
+#taskInputAddButton {
     font-size: inherit;
     width: 30%;
     border: none;
@@ -973,24 +1023,28 @@
     border-radius: 0.4rem;
     padding: 0.5rem 1rem;
     background-color: #EAF6FF;
-    color: black    ;
+    color: black;
     border: 2px solid black;
     cursor: pointer;
     transition: transform 0.5s ease;
 }
-#taskInputContainer>#taskInput>#taskInputActionButtons>#taskInputDiscardButton:hover,
-#taskInputContainer>#taskInput>#taskInputActionButtons>#taskInputAddButton:hover{
+
+#taskInputDiscardButton:hover,
+#taskInputAddButton:hover {
     transform: scale(1.1);
 }
-#taskInputContainer>#taskInput>#taskInputActionButtons>#taskInputDiscardButton:active,
-#taskInputContainer>#taskInput>#taskInputActionButtons>#taskInputAddButton:active{
+
+#taskInputDiscardButton:active,
+#taskInputAddButton:active {
     transform: scale(1.05);
 }
-#taskInputPriority{
+
+#taskInputPriority {
     position: relative;
 }
+
 /* Task Message */
-#taskMessageContainer{
+#taskMessageContainer {
     position: fixed;
     height: 100%;
     width: 100%;
@@ -1000,7 +1054,8 @@
     pointer-events: none;
     user-select: none;
 }
-#taskMessageContainer>#taskMessageWrapper{
+
+#taskMessageWrapper {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -1022,25 +1077,31 @@
     transform: translateY(-200%);
     transition: transform 0.5s ease, opacity 0.5s ease;
 }
-#taskMessageContainer.visible>#taskMessageWrapper{
+
+#taskMessageContainer.visible>#taskMessageWrapper {
     opacity: 1;
     transform: translateY(0%);
 }
-#taskMessageContainer>#taskMessageWrapper>#taskMessageHeading{
-    font-family:var(--primary-font-family);
+
+#taskMessageHeading {
+    font-family: var(--primary-font-family);
     font-size: 2rem;
 }
-#taskMessageContainer>#taskMessageWrapper>#taskMessage{
-    user-select:text;
+
+#taskMessage {
+    font-family: var(--quaternary-font-family);
+    user-select: text;
     font-size: 1.5rem;
 }
-#taskMessageContainer>#taskMessageWrapper>#taskMessageActions{
+
+#taskMessageActions {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 1rem;
 }
-#taskMessageContainer>#taskMessageWrapper>#taskMessageActions>button{
+
+#taskMessageActions>button {
     background: none;
     border: none;
     background-color: rgba(255, 255, 255, 0.8);
@@ -1051,9 +1112,138 @@
     cursor: pointer;
     transition: transform 0.3s ease;
 }
-#taskMessageContainer>#taskMessageWrapper>#taskMessageActions>button:hover{
+
+#taskMessageActions>button:hover {
     transform: scale(1.1);
 }
-#taskMessageContainer>#taskMessageWrapper>#taskMessageActions>button:active{
+
+#taskMessageActions>button:active {
+    transform: scale(1.05);
+}
+
+/* Project Input */
+#projectInputContainer {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    user-select: none;
+    color: white;
+}
+
+#projectInputOverlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(0.1rem);
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+#projectInputContainer.visible>#projectInputOverlay {
+    pointer-events: all;
+    opacity: 1;
+}
+
+#projectInput {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 50svh;
+    width: 70svh;
+    backdrop-filter: blur(0.2rem);
+    pointer-events: all;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    z-index: 10;
+    padding: 1rem;
+    transform: translateY(-200%);
+    transition: transform 0.5s ease;
+}
+
+#projectInputContainer.visible>#projectInput {
+    pointer-events: all;
+    user-select: text;
+    transform: translateY(0%);
+}
+
+#projectInputHeading {
+    font-family: var(--primary-font-family);
+    font-size: 2rem;
+}
+
+#projectInputNameLabel,
+#projectInputColorLabel {
+    font-family: var(--tertiary-font-family);
+    font-size: 1.7rem;
+    width: 35%;
+}
+
+#projectInput>*:not(#projectInputHeading, #projectInputActions) {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+
+#projectInputName,
+#projectInputColor {
+    border: none;
+    outline: none;
+    background: none;
+    width: 100%;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 0.4rem;
+}
+
+#projectInputName {
+    height: 70%;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: inherit;
+    font-size: 1.4rem;
+    padding: 0.6rem;
+}
+
+#projectInputColor {
+    height: 105%;
+    width: 105%;
+    appearance: none;
+    cursor: pointer;
+}
+
+#projectInputActions{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+#projectInputCancel,
+#projectInputCreate{
+    border: none;
+    outline: none;
+    background: none;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 2px solid rgba(0, 0, 0, 0.5);
+    padding: 0.4rem 0.8rem;
+    width: 30%;
+    border-radius: 0.4rem;
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: var(--primary-font-family);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+#projectInputCancel:hover,
+#projectInputCreate:hover{
+    transform: scale(1.1);
+}
+#projectInputCancel:active,
+#projectInputCreate:active{
     transform: scale(1.05);
 }

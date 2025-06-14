@@ -1,31 +1,8 @@
 import Todo from "./todo"
 import TaskUI from './todo-ui-tasks'
+import ProjectUI from './todo-ui-projects'
 import FilterUI from './todo-ui-task-filters'
 
-function initProjects() {
-    const projectsContainer = document.getElementById('all-projects-container')
-    Todo.Projects.forEach(project => {
-        projectsContainer.innerHTML = ''
-        const DOMProject = document.createElement('div')
-        DOMProject.classList.add('project')
-        DOMProject.dataset.ID = project.ID
-        projectsContainer.appendChild(DOMProject)
-
-        const DOMProjectLabelColor = document.createElement('div')
-        DOMProjectLabelColor.classList.add('project-label-color')
-        DOMProject.appendChild(DOMProjectLabelColor)
-
-        const DOMProjectTitle = document.createElement('div')
-        DOMProjectTitle.classList.add('project-title')
-        DOMProjectTitle.textContent = project.name
-        DOMProject.appendChild(DOMProjectTitle)
-
-        const DOMProjectTotalTasksCounter = document.createElement('div')
-        DOMProjectTotalTasksCounter.classList.add('total-tasks-counter')
-        DOMProjectTotalTasksCounter.textContent = project.tasks.length
-        DOMProject.appendChild(DOMProjectTotalTasksCounter)
-    })
-}
 function initSidebarToggle() {
     const content = document.getElementById('content')
     const toggleSidebarButton = document.getElementById('button-toggle-sidebar')
@@ -38,6 +15,7 @@ function initSidebarToggle() {
     })
 }
 function initTaskInputPopup() {
+    const filtersContainer = document.getElementById('filtered-tasks')
     const showAddTaskButton = document.getElementById('button-add-task')
     const taskInputContainer = document.getElementById('taskInputContainer')
     const taskInputTitle = document.getElementById('taskInputTitle')
@@ -48,18 +26,29 @@ function initTaskInputPopup() {
     const taskInputs = [ taskInputTitle, taskInputDescription, taskInputNote, taskInputPriority, taskInputDueDateTime ]
     const discardTaskButton = document.getElementById('taskInputDiscardButton')
     const addTaskButton = document.getElementById('taskInputAddButton')
-    const taskInputProject = document.getElementById('taskInputProject')
-    Todo.Projects.forEach(project => {
-        const projectName = document.createElement('option')
-        projectName.value = project.ID
-        projectName.textContent = project.name
-        taskInputProject.appendChild(projectName)
-    })
 
     showAddTaskButton.addEventListener('click', () => {
         const currentDate = new Date()
-        taskInputDueDateTime.value = currentDate.toISOString().slice(0, 10) + 'T' + currentDate.toTimeString().slice(0, 5)
+        let localDate = currentDate.toLocaleDateString().split("/")[1]
+        if(localDate.split('').length === 1){
+            localDate = "0" + localDate
+        }
+        let [currentHour, currentMinute] = currentDate.toLocaleTimeString().split(":")
+        if(currentHour.split('').length === 1){
+            currentHour = "0" + currentHour
+        }
+        let currentHourMinute = currentHour + ":" + currentMinute
+        taskInputDueDateTime.value = `${currentDate.toISOString().slice(0,7)}-${localDate}T${currentHourMinute}`
         taskInputContainer.classList.add('visible')
+
+        const taskInputProject = document.getElementById('taskInputProject')
+        taskInputProject.innerHTML = ''
+        Todo.Projects.forEach(project => {
+            const projectName = document.createElement('option')
+            projectName.value = project.ID
+            projectName.textContent = project.name
+            taskInputProject.appendChild(projectName)
+        })
     })
     discardTaskButton.addEventListener('click', () => {
         taskInputs.forEach(input => {
@@ -82,7 +71,11 @@ function initTaskInputPopup() {
             if (input.id === "taskInputPriority") { } else { input.value = '' }
         })
         taskInputContainer.classList.remove('visible')
-        FilterUI.load.selected()
+        if (filtersContainer.dataset.filter === '') {
+            ProjectUI.load()
+        } else {
+            FilterUI.load.selected()
+        }
         TaskUI.init.listeners.all()
     })
     const taskInput = document.getElementById('taskInput')
@@ -91,7 +84,7 @@ function initTaskInputPopup() {
     taskInputOverlay.classList.add('taskInputOverlayTransiton')
 }
 function init() {
-    initProjects()
+    ProjectUI.init()
     initSidebarToggle()
     initTaskInputPopup()
     TaskUI.init.listeners.all()
@@ -101,7 +94,6 @@ function init() {
 const todoUI = {
     init: {
         all: init,
-        projects: initProjects,
         sidebar: initSidebarToggle,
         taskInput: initTaskInputPopup,
     }

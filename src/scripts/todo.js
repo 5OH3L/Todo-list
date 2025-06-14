@@ -1,7 +1,8 @@
 const Projects = [
     {
-        name: "Default Project",
+        name: "Default",
         ID: crypto.randomUUID(),
+        color: "#ffffff",
         tasks: []
     }
 ]
@@ -32,6 +33,7 @@ function loadFromLocalStorage() {
         projectData.forEach(data => {
             const project = new Project(data.name)
             project.ID = data.ID
+            project.color = data.color
 
             project.tasks = data.tasks.map(taskData => {
                 const task = new Task(
@@ -74,17 +76,18 @@ function loadFromLocalStorage() {
 
 
 class Project {
-    constructor(name) {
+    constructor(name, color) {
         this.name = name
         this.ID = crypto.randomUUID()
+        this.color = color
         this.tasks = []
     }
 }
-function createProject(name) {
-    return new Project(name)
+function createProject(name, color) {
+    return new Project(name, color)
 }
-function addProject(name) {
-    Projects.push(createProject(name))
+function addProject(name, color) {
+    Projects.push(createProject(name, color))
     saveToLocalStorage()
 }
 

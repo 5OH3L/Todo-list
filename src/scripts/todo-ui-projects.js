@@ -1,0 +1,97 @@
+import TaskUI from "./todo-ui-tasks"
+import Todo from "./todo"
+
+function loadProjects() {
+    const projectsContainer = document.getElementById('all-projects-container')
+    projectsContainer.innerHTML = ''
+    Todo.Projects.forEach(project => {
+        const DOMProject = document.createElement('div')
+        DOMProject.classList.add('project')
+        DOMProject.dataset.id = project.ID
+        projectsContainer.appendChild(DOMProject)
+
+        const DOMProjectLabelColor = document.createElement('div')
+        DOMProjectLabelColor.classList.add('project-label-color')
+        DOMProjectLabelColor.style.backgroundColor = project.color
+        DOMProject.appendChild(DOMProjectLabelColor)
+
+        const DOMProjectTitle = document.createElement('div')
+        DOMProjectTitle.classList.add('project-title')
+        DOMProjectTitle.textContent = project.name
+        DOMProject.appendChild(DOMProjectTitle)
+
+        const DOMProjectTotalTasksCounter = document.createElement('div')
+        DOMProjectTotalTasksCounter.classList.add('total-tasks-counter')
+        DOMProjectTotalTasksCounter.textContent = project.tasks.length
+        DOMProject.appendChild(DOMProjectTotalTasksCounter)
+    })
+}
+function loadSelectedProjectTasks(DOMProject) {
+    const currentTabCategory = document.getElementById('currentTabCategory')
+    const currentTabLabel = document.getElementById('currentTab')
+    const tasksContainer = document.getElementById('tasks-section')
+    tasksContainer.innerHTML = ""
+    const filteredTasksContainer = document.getElementById('filtered-tasks')
+    const filters = Array.from(document.getElementsByClassName('filtered-task'))
+    filters.forEach(filter => {
+        if (filter.classList.contains('selected')) filter.classList.remove('selected')
+    })
+    filteredTasksContainer.dataset.filter = ''
+    const selectedProject = Todo.Find.Project(DOMProject.dataset.id)
+    selectedProject.tasks.forEach(task => {
+        TaskUI.load(task)
+        TaskUI.init.listeners.all()
+    })
+    TaskUI.init.listeners.all()
+    currentTabCategory.textContent = "Project:"
+    currentTabLabel.textContent = selectedProject.name
+}
+function initProjectListener() {
+    const DOMProjects = Array.from(document.getElementsByClassName('project'))
+    DOMProjects.forEach(DOMProject => {
+        DOMProject.addEventListener('click', () => {
+            if (DOMProject.classList.contains('selected')) return
+            DOMProjects.forEach(Project => Project.classList.remove('selected'))
+            DOMProject.classList.add('selected')
+            loadSelectedProjectTasks(DOMProject)
+        })
+    })
+}
+
+function initProjects() {
+    loadProjects()
+    const addProjectButton = document.getElementById('add-project')
+    const projectInputContainer = document.getElementById('projectInputContainer')
+    const projectInputName = document.getElementById('projectInputName')
+    const projectInputColor = document.getElementById('projectInputColor')
+    const projectInputCancelButton = document.getElementById('projectInputCancel')
+    const projectInputCreateButton = document.getElementById('projectInputCreate')
+    addProjectButton.addEventListener('click', () => {
+        projectInputContainer.classList.add('visible')
+    })
+    projectInputCancelButton.addEventListener('click', () => {
+        projectInputContainer.classList.remove('visible')
+    })
+    projectInputCreateButton.addEventListener('click', () => {
+        if (projectInputName.value.trim() === '') {
+            alert("Project name can't be empty!")
+            return
+        }
+        const inputName = projectInputName.value
+        const inputColor = projectInputColor.value
+        projectInputName.value = ''
+        projectInputColor.value = "#ffffff"
+        projectInputContainer.classList.remove('visible')
+        Todo.AddProject(inputName, inputColor)
+        loadProjects()
+        initProjectListener()
+    })
+    initProjectListener()
+}
+
+
+const projectUI = {
+    init: initProjects,
+    load: loadSelectedProjectTasks
+}
+export default projectUI
