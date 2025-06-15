@@ -76,6 +76,7 @@ function initTaskInputPopup() {
         } else {
             FilterUI.load.selected()
         }
+        ProjectUI.refreshTaskCounter()
         TaskUI.init.listeners.all()
     })
     const taskInput = document.getElementById('taskInput')

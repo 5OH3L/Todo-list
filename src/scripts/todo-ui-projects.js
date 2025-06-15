@@ -39,7 +39,7 @@ function loadSelectedProjectTasks(DOMProject) {
     filteredTasksContainer.dataset.filter = ''
     const selectedProject = Todo.Find.Project(DOMProject.dataset.id)
     selectedProject.tasks.forEach(task => {
-        TaskUI.load(task)
+        TaskUI.load(task, true)
         TaskUI.init.listeners.all()
     })
     TaskUI.init.listeners.all()
@@ -88,10 +88,22 @@ function initProjects() {
     })
     initProjectListener()
 }
+function updateProjectTasksCounter(){
+    const projects = Array.from(document.getElementsByClassName('project'))
+    projects.forEach(project=>{
+        const storedProject = Todo.Find.Project(project.dataset.id)
+        const taskCounter = project.getElementsByClassName('total-tasks-counter')[0]
+        taskCounter.textContent = 0
+        storedProject.tasks.forEach(task=>{
+            taskCounter.textContent = Number(taskCounter.textContent) + 1
+        })
+    })
+}
 
 
 const projectUI = {
     init: initProjects,
+    refreshTaskCounter: updateProjectTasksCounter,
     load: loadSelectedProjectTasks
 }
 export default projectUI
