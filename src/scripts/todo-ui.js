@@ -3,6 +3,15 @@ import TaskUI from './todo-ui-tasks'
 import ProjectUI from './todo-ui-projects'
 import FilterUI from './todo-ui-task-filters'
 
+function initPopups() {
+    const taskInputContainer = document.getElementById('taskInputContainer')
+    const projectInputContainer = document.getElementById('projectInputContainer')
+    const taskMessageContainer = document.getElementById('taskMessageContainer')
+    taskInputContainer.classList.remove('displayNone')
+    projectInputContainer.classList.remove('displayNone')
+    taskMessageContainer.classList.remove('displayNone')
+}
+
 function initSidebarToggle() {
     const content = document.getElementById('content')
     const toggleSidebarButton = document.getElementById('button-toggle-sidebar')
@@ -29,16 +38,16 @@ function initTaskInputPopup() {
 
     showAddTaskButton.addEventListener('click', () => {
         const currentDate = new Date()
-        let localDate = currentDate.toLocaleDateString().split("/")[1]
-        if(localDate.split('').length === 1){
+        let localDate = currentDate.toLocaleDateString().split("/")[ 1 ]
+        if (localDate.split('').length === 1) {
             localDate = "0" + localDate
         }
-        let [currentHour, currentMinute] = currentDate.toLocaleTimeString().split(":")
-        if(currentHour.split('').length === 1){
+        let [ currentHour, currentMinute ] = currentDate.toLocaleTimeString().split(":")
+        if (currentHour.split('').length === 1) {
             currentHour = "0" + currentHour
         }
         let currentHourMinute = currentHour + ":" + currentMinute
-        taskInputDueDateTime.value = `${currentDate.toISOString().slice(0,7)}-${localDate}T${currentHourMinute}`
+        taskInputDueDateTime.value = `${currentDate.toISOString().slice(0, 7)}-${localDate}T${currentHourMinute}`
         taskInputContainer.classList.add('visible')
 
         const taskInputProject = document.getElementById('taskInputProject')
@@ -97,6 +106,7 @@ const todoUI = {
         all: init,
         sidebar: initSidebarToggle,
         taskInput: initTaskInputPopup,
+        popup:initPopups
     }
 }
 export default todoUI

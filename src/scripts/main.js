@@ -6,8 +6,11 @@ import TodoUI from './todo-ui.js'
 import FilterUI from './todo-ui-task-filters.js'
 import "../fonts/montserrat/Montserrat-Bold.ttf"
 Todo.Load()
-document.addEventListener("DOMContentLoaded", ()=>{
+document.addEventListener("DOMContentLoaded", () => {
     FilterUI.load.all()
     TodoUI.init.all()
     MessageUI.init.all()
 })
+window.onload = () => {
+    TodoUI.init.popup()
+}

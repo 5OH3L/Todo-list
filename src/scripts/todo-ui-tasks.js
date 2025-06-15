@@ -7,11 +7,11 @@ import Todo from './todo'
 function loadTask(task, includeCompleted = false) {
     const taskSection = document.getElementById('tasks-section')
     const taskContainer = document.createElement('div')
-    if(task.isChecked && !includeCompleted) return
+    if (task.isChecked && !includeCompleted) return
     taskContainer.dataset.id = task.ID
     if (task.isChecked) { taskContainer.classList.add('checked') }
     taskContainer.classList.add('task')
-    if(task.isTrashed) {taskContainer.classList.add('trashed')}
+    if (task.isTrashed) { taskContainer.classList.add('trashed') }
 
     const taskDetails = document.createElement('div')
     taskDetails.classList.add('details')
@@ -41,6 +41,7 @@ function loadTask(task, includeCompleted = false) {
     taskDetails.appendChild(taskDescription)
 
     const taskDescriptionText = document.createElement('textarea')
+    taskDescriptionText.readOnly = true
     taskDescriptionText.name = "description-text"
     taskDescriptionText.classList.add('description-text')
     taskDescriptionText.value = task.description
@@ -83,7 +84,8 @@ function loadTask(task, includeCompleted = false) {
     taskPriorityInput.classList.add("priority-input")
     taskPriorityInput.name = "priority-input"
     taskPriorityInput.addEventListener('input', e => {
-        const priority = Number(e.target.value)
+        const priority = Number(taskPriorityInput.value)
+        task.priority = priority
         taskPriorityText.textContent = priority === 3 ? "High" : priority === 2 ? "Medium" : priority === 1 ? "Low" : null
         taskPriorityIndicator.style.borderColor = priority === 3 ? "red" : priority === 2 ? "orange" : priority === 1 ? "greenyellow" : "black"
         Todo.Save()
@@ -193,7 +195,7 @@ function loadTask(task, includeCompleted = false) {
 }
 
 function taskCheckListener(pointerEvent) {
-    if(!pointerEvent.target.classList.contains('priority-indicator')) return
+    if (!pointerEvent.target.classList.contains('priority-indicator')) return
     const task = pointerEvent.currentTarget
     const taskCheckbox = pointerEvent.target
     if (task.classList.contains('checked')) {
@@ -210,9 +212,9 @@ function taskCheckListener(pointerEvent) {
 function taskDeleteListener(pointerEvent) {
     const task = pointerEvent.currentTarget
     if (!task || !(pointerEvent.target.classList.contains('delete'))) return
-    if(task.classList.contains('trashed')){
+    if (task.classList.contains('trashed')) {
         Message.confirm(task)
-    }else{
+    } else {
         Todo.TrashTask(task.dataset.id)
         FilterUI.load.selected()
     }
@@ -222,11 +224,16 @@ function taskCheckAndDeleteListener(pointerEvent) {
     taskDeleteListener(pointerEvent)
 }
 function taskExpandListener(pointerEvent) {
-    if (pointerEvent.target.classList.contains('priority-indicator') || pointerEvent.target.classList.contains('re-order')) return
-    const task = pointerEvent.currentTarget
-    task.classList.add("expanded")
-    const taskDescriptionText = task.getElementsByClassName('description-text')[ 0 ]
-    const taskNoteText = task.getElementsByClassName('note-text')[ 0 ]
+    const clickedTask = pointerEvent.currentTarget
+    const clickedElement = pointerEvent.target
+    if (clickedElement.classList.contains('priority-indicator') ||
+        clickedElement.classList.contains('re-order') ||
+        clickedTask.classList.contains('expanded')) return
+    const allTasks = Array.from(document.getElementsByClassName('task'))
+    if (allTasks.some(task => task.classList.contains('expanded'))) { allTasks.forEach(task => { task.classList.remove('expanded') }) }
+    clickedTask.classList.add('expanded')
+    const taskDescriptionText = clickedTask.getElementsByClassName('description-text')[ 0 ]
+    const taskNoteText = clickedTask.getElementsByClassName('note-text')[ 0 ]
     taskDescriptionText.readOnly = false
     taskNoteText.readOnly = false
 }
@@ -239,6 +246,7 @@ function initTaskCollapse() {
             tasks.forEach(task => {
                 if (task.classList.contains('expanded')) {
                     const taskDescription = task.getElementsByClassName('description-text')[ 0 ]
+                    taskDescription.readOnly = true
                     taskDescription.classList.add('show')
                     setTimeout(() => {
                         taskDescription.classList.remove('show')
