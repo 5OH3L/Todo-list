@@ -2,6 +2,7 @@ import Todo from "./todo"
 import TaskUI from './todo-ui-tasks'
 import ProjectUI from './todo-ui-projects'
 import FilterUI from './todo-ui-task-filters'
+import projectUI from "./todo-ui-projects"
 
 function initPopups() {
     const taskInputContainer = document.getElementById('taskInputContainer')
@@ -10,6 +11,20 @@ function initPopups() {
     taskInputContainer.classList.remove('displayNone')
     projectInputContainer.classList.remove('displayNone')
     taskMessageContainer.classList.remove('displayNone')
+}
+function initSortListener() {
+    const sidebar = document.getElementById('sidebar')
+    const sortSelect = document.getElementById("sort")
+    if (sortSelect) {
+        sortSelect.addEventListener("change", () => {
+            if(sidebar.dataset.category === "filter"){
+                FilterUI.load.selected()
+            }else if(sidebar.dataset.category === "project"){
+                const selectedProject = document.getElementById('all-projects-container').getElementsByClassName('project selected')[0]
+                ProjectUI.load(selectedProject, true)
+            }
+        })
+    }
 }
 
 function initSidebarToggle() {
@@ -97,6 +112,7 @@ function init() {
     ProjectUI.init()
     initSidebarToggle()
     initTaskInputPopup()
+    initSortListener()
     TaskUI.init.listeners.all()
     FilterUI.init.listeners()
 }

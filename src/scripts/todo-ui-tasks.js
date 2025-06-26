@@ -1,6 +1,7 @@
 import iconTaskDelete from '../icons/iconCross.svg'
 import iconTaskReOrder from '../icons/iconHorizontalDrag.svg'
 import FilterUI from './todo-ui-task-filters'
+import ProjectUI from './todo-ui-projects'
 import Message from './todo-ui-message'
 import Todo from './todo'
 
@@ -193,7 +194,6 @@ function loadTask(task, includeCompleted = false) {
 
     taskSection.appendChild(taskContainer)
 }
-
 function taskCheckListener(pointerEvent) {
     if (!pointerEvent.target.classList.contains('priority-indicator')) return
     const task = pointerEvent.currentTarget
@@ -217,6 +217,7 @@ function taskDeleteListener(pointerEvent) {
     } else {
         Todo.TrashTask(task.dataset.id)
         FilterUI.load.selected()
+        ProjectUI.refreshTaskCounter()
     }
 }
 function taskCheckAndDeleteListener(pointerEvent) {
@@ -294,6 +295,24 @@ function initAllListeners() {
     initTaskEventListeners()
     initTaskCollapse()
 }
+function sortTasks(tasks, sortOption) {
+    if (["high", "medium", "low"].includes(sortOption)) {
+        const selectedPriority = { high: 3, medium: 2, low: 1 }[sortOption]
+        return tasks.sort((a, b) => {
+            if (a.priority === b.priority) {
+                return a.dueDateTime - b.dueDateTime
+            }
+            if (a.priority === selectedPriority) return -1
+            if (b.priority === selectedPriority) return 1
+            return b.priority - a.priority
+        })
+    } else if (sortOption === "due") {
+        return tasks.sort((a, b) => a.dueDateTime - b.dueDateTime)
+    }
+    return tasks
+}
+
+
 const taskUI = {
     init: {
         collapse: initTaskCollapse,
@@ -303,6 +322,7 @@ const taskUI = {
             collapse: initTaskCollapse
         }
     },
-    load: loadTask
+    load: loadTask,
+    sort: sortTasks
 }
 export default taskUI

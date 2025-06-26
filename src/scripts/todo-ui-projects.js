@@ -8,6 +8,7 @@ function loadProjects() {
         const DOMProject = document.createElement('div')
         DOMProject.classList.add('project')
         DOMProject.dataset.id = project.ID
+        DOMProject.dataset.title = project.name
         projectsContainer.appendChild(DOMProject)
 
         const DOMProjectLabelColor = document.createElement('div')
@@ -26,35 +27,45 @@ function loadProjects() {
         DOMProject.appendChild(DOMProjectTotalTasksCounter)
     })
 }
-function loadSelectedProjectTasks(DOMProject) {
+function loadSelectedProjectTasks(DOMProject, force = false) {
+    if(DOMProject instanceof PointerEvent){DOMProject = DOMProject.currentTarget}
+    const sidebar = document.getElementById('sidebar')
+    if((sidebar.dataset.filter === DOMProject.dataset.title.toLowerCase()) && !force) return
+    const allProjects = Array.from(document.getElementsByClassName('project'))
+    allProjects.forEach(project=>{if(project.classList.contains('selected')){project.classList.remove('selected')}})
+
+    DOMProject.classList.add('selected')
     const currentTabCategory = document.getElementById('currentTabCategory')
     const currentTabLabel = document.getElementById('currentTab')
     const tasksContainer = document.getElementById('tasks-section')
     tasksContainer.innerHTML = ""
-    const filteredTasksContainer = document.getElementById('filtered-tasks')
     const filters = Array.from(document.getElementsByClassName('filtered-task'))
     filters.forEach(filter => {
         if (filter.classList.contains('selected')) filter.classList.remove('selected')
     })
-    filteredTasksContainer.dataset.filter = ''
+    sidebar.dataset.category = 'project'
     const selectedProject = Todo.Find.Project(DOMProject.dataset.id)
-    selectedProject.tasks.forEach(task => {
+
+    const sortSelect = document.getElementById('sort')
+    const sortOption = sortSelect ? sortSelect.value : "due"
+
+    let tasks = []
+    selectedProject.tasks.forEach(task => {tasks.push(task)})
+
+    const sortedTasks = TaskUI.sort(tasks, sortOption)
+    sortedTasks.forEach(task =>{
         TaskUI.load(task, true)
-        TaskUI.init.listeners.all()
     })
+    
     TaskUI.init.listeners.all()
     currentTabCategory.textContent = "Project:"
+    sidebar.dataset.filter = selectedProject.name.toLowerCase()
     currentTabLabel.textContent = selectedProject.name
 }
 function initProjectListener() {
     const DOMProjects = Array.from(document.getElementsByClassName('project'))
     DOMProjects.forEach(DOMProject => {
-        DOMProject.addEventListener('click', () => {
-            if (DOMProject.classList.contains('selected')) return
-            DOMProjects.forEach(Project => Project.classList.remove('selected'))
-            DOMProject.classList.add('selected')
-            loadSelectedProjectTasks(DOMProject)
-        })
+        DOMProject.addEventListener('click', loadSelectedProjectTasks)
     })
 }
 

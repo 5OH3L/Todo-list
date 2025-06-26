@@ -3,7 +3,10 @@ import Todo from "./todo"
 
 
 function taskFilterListeners(filter) {
-    const filtersContainer = document.getElementById('filtered-tasks')
+    const sidebar = document.getElementById('sidebar')
+    filter = filter.currentTarget
+    if (sidebar.dataset.filter === filter.dataset.filter) return
+    sidebar.dataset.category = "filter"
     const filters = Array.from(document.getElementsByClassName('filtered-task'))
     const projects = Array.from(document.getElementsByClassName('project'))
     const currentTabCategory = document.getElementById('currentTabCategory')
@@ -14,30 +17,29 @@ function taskFilterListeners(filter) {
     projects.forEach(project => {
         project.classList.remove('selected')
     })
-    filter = filter.currentTarget
     filter.classList.add('selected')
-    if (filter.dataset.filter === "all" && filtersContainer.dataset.filter !== "all") {
-        filtersContainer.dataset.filter = "all"
+    if (filter.dataset.filter === "all") {
+        sidebar.dataset.filter = "all"
         loadAllTasks()
 
-    } else if (filter.dataset.filter === "completed" && filtersContainer.dataset.filter !== "completed") {
-        filtersContainer.dataset.filter = "completed"
+    } else if (filter.dataset.filter === "completed") {
+        sidebar.dataset.filter = "completed"
         loadCompletedTasks()
 
-    } else if (filter.dataset.filter === "today" && filtersContainer.dataset.filter !== "today") {
-        filtersContainer.dataset.filter = "today"
+    } else if (filter.dataset.filter === "today") {
+        sidebar.dataset.filter = "today"
         loadTodayTasks()
 
-    } else if (filter.dataset.filter === "upcoming" && filtersContainer.dataset.filter !== "upcoming") {
-        filtersContainer.dataset.filter = "upcoming"
+    } else if (filter.dataset.filter === "upcoming") {
+        sidebar.dataset.filter = "upcoming"
         loadUpcomingTasks()
 
-    } else if (filter.dataset.filter === "missed" && filtersContainer.dataset.filter !== "missed") {
-        filtersContainer.dataset.filter = "missed"
+    } else if (filter.dataset.filter === "missed") {
+        sidebar.dataset.filter = "missed"
         loadMissedTasks()
 
-    } else if (filter.dataset.filter === "trash" && filtersContainer.dataset.filter !== "trash") {
-        filtersContainer.dataset.filter = "trash"
+    } else if (filter.dataset.filter === "trash") {
+        sidebar.dataset.filter = "trash"
         loadTrashedTasks()
 
     }
@@ -57,76 +59,127 @@ function initTaskFilterListeners() {
 function loadAllTasks() {
     const taskSection = document.getElementById('tasks-section')
     taskSection.innerHTML = ""
+
+    const sortSelect = document.getElementById('sort')
+    const sortOption = sortSelect ? sortSelect.value : "due"
+
+    let tasks = []
     Todo.Projects.forEach(project => {
-        project.tasks.forEach(task => {
-            TaskUI.load(task)
-        })
+        tasks.push(...project.tasks)
+    })
+
+    const sortedTasks = TaskUI.sort(tasks, sortOption)
+    sortedTasks.forEach(task =>{
+        TaskUI.load(task)
     })
 }
 function loadCompletedTasks() {
     const taskSection = document.getElementById('tasks-section')
     taskSection.innerHTML = ""
+
+    const sortSelect = document.getElementById('sort')
+    const sortOption = sortSelect ? sortSelect.value : "due"
+
+    let tasks = []
     Todo.Projects.forEach(project => {
         project.tasks.forEach(task => {
-            if (task.isChecked === true) { TaskUI.load(task, true) }
+            if (task.isChecked === true) { tasks.push(task) }
         })
-        Todo.Trash.forEach(task => {
-            if (task.isChecked === true) { TaskUI.load(task, true) }
-        })
+    })
+
+    const sortedTasks = TaskUI.sort(tasks, sortOption)
+    sortedTasks.forEach(task =>{
+        TaskUI.load(task)
     })
 }
 function loadTodayTasks() {
     const taskSection = document.getElementById('tasks-section')
     taskSection.innerHTML = ""
 
+    const sortSelect = document.getElementById('sort')
+    const sortOption = sortSelect ? sortSelect.value : "due"
+
+    let tasks = []
     Todo.Projects.forEach(project => {
         project.tasks.forEach(task => {
-            if (task.dueDateTime.toLocaleDateString() === new Date().toLocaleDateString()) { TaskUI.load(task) }
+            if (task.dueDateTime.toLocaleDateString() === new Date().toLocaleDateString()) { tasks.push(task) }
         })
+    })
+
+    const sortedTasks = TaskUI.sort(tasks, sortOption)
+    sortedTasks.forEach(task =>{
+        TaskUI.load(task)
     })
 }
 function loadUpcomingTasks() {
     const taskSection = document.getElementById('tasks-section')
     taskSection.innerHTML = ""
 
+    const sortSelect = document.getElementById('sort')
+    const sortOption = sortSelect ? sortSelect.value : "due"
+
+    let tasks = []
     Todo.Projects.forEach(project => {
         project.tasks.forEach(task => {
-            if (task.dueDateTime > new Date()) { TaskUI.load(task) }
+            if (task.dueDateTime > new Date()) { tasks.push(task) }
         })
+    })
+
+    const sortedTasks = TaskUI.sort(tasks, sortOption)
+    sortedTasks.forEach(task =>{
+        TaskUI.load(task)
     })
 }
 function loadMissedTasks() {
     const taskSection = document.getElementById('tasks-section')
     taskSection.innerHTML = ""
 
+    const sortSelect = document.getElementById('sort')
+    const sortOption = sortSelect ? sortSelect.value : "due"
+
+    let tasks = []
     Todo.Projects.forEach(project => {
         project.tasks.forEach(task => {
-            if (task.dueDateTime < new Date()) { TaskUI.load(task) }
+            if (task.dueDateTime < new Date()) { tasks.push(task) }
         })
+    })
+
+    const sortedTasks = TaskUI.sort(tasks, sortOption)
+    sortedTasks.forEach(task =>{
+        TaskUI.load(task)
     })
 }
 function loadTrashedTasks() {
     const taskSection = document.getElementById('tasks-section')
     taskSection.innerHTML = ""
 
+    const sortSelect = document.getElementById('sort')
+    const sortOption = sortSelect ? sortSelect.value : "due"
+
+    let tasks = []
     Todo.Trash.forEach(task => {
-            if (task.isTrashed) { TaskUI.load(task) }
-        })
+        if (task.isTrashed) { tasks.push(task) }
+    })
+
+    const sortedTasks = TaskUI.sort(tasks, sortOption)
+    sortedTasks.forEach(task =>{
+        TaskUI.load(task, true)
+    })
 }
-function loadSelectedFilterTasks(){
-    const filtersContainer = document.getElementById('filtered-tasks')
-    if(filtersContainer.dataset.filter === "all"){loadAllTasks()}
-    else if (filtersContainer.dataset.filter === "completed"){loadCompletedTasks()}
-    else if (filtersContainer.dataset.filter === "today"){loadTodayTasks()}
-    else if (filtersContainer.dataset.filter === "upcoming"){loadUpcomingTasks()}
-    else if (filtersContainer.dataset.filter === "missed"){loadMissedTasks()}
-    else if (filtersContainer.dataset.filter === "trash"){loadTrashedTasks()}
+function loadSelectedFilterTasks() {
+    const sidebar = document.getElementById('sidebar')
+    if (sidebar.dataset.filter === "all") { loadAllTasks() }
+    else if (sidebar.dataset.filter === "completed") { loadCompletedTasks() }
+    else if (sidebar.dataset.filter === "today") { loadTodayTasks() }
+    else if (sidebar.dataset.filter === "upcoming") { loadUpcomingTasks() }
+    else if (sidebar.dataset.filter === "missed") { loadMissedTasks() }
+    else if (sidebar.dataset.filter === "trash") { loadTrashedTasks() }
     TaskUI.init.listeners.all()
 }
 
 const todoTaskFilter = {
     load: {
-        selected:loadSelectedFilterTasks,
+        selected: loadSelectedFilterTasks,
         all: loadAllTasks,
         completed: loadCompletedTasks,
         today: loadTodayTasks,
