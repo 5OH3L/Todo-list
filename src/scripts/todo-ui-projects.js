@@ -28,12 +28,12 @@ function loadProjects() {
     })
 }
 function loadSelectedProjectTasks(DOMProject, force = false) {
-    if(DOMProject instanceof PointerEvent){DOMProject = DOMProject.currentTarget}
+    if (DOMProject instanceof PointerEvent) { DOMProject = DOMProject.currentTarget }
     const sidebar = document.getElementById('sidebar')
-    if((sidebar.dataset.filter === DOMProject.dataset.title.toLowerCase()) && !force) return
-    const allProjects = Array.from(document.getElementsByClassName('project'))
-    allProjects.forEach(project=>{if(project.classList.contains('selected')){project.classList.remove('selected')}})
+    if ((sidebar.dataset.filter === DOMProject.dataset.title.toLowerCase()) && !force) return
 
+    const allProjects = Array.from(document.getElementsByClassName('project'))
+    allProjects.forEach(project => { if (project.classList.contains('selected')) { project.classList.remove('selected') } })
     DOMProject.classList.add('selected')
     const currentTabCategory = document.getElementById('currentTabCategory')
     const currentTabLabel = document.getElementById('currentTab')
@@ -47,19 +47,24 @@ function loadSelectedProjectTasks(DOMProject, force = false) {
     const selectedProject = Todo.Find.Project(DOMProject.dataset.id)
 
     const sortSelect = document.getElementById('sort')
+    sortSelect.value = "manual"
+    if (sortSelect) {
+        const manualOption = sortSelect.querySelector('option[value="manual"]')
+        if (manualOption) manualOption.hidden = false
+    }
     const sortOption = sortSelect ? sortSelect.value : "due"
 
     let tasks = []
-    selectedProject.tasks.forEach(task => {tasks.push(task)})
+    selectedProject.tasks.forEach(task => { tasks.push(task) })
 
     const sortedTasks = TaskUI.sort(tasks, sortOption)
-    sortedTasks.forEach(task =>{
+    sortedTasks.forEach(task => {
         TaskUI.load(task, true)
     })
-    
+
     TaskUI.init.listeners.all()
     currentTabCategory.textContent = "Project:"
-    sidebar.dataset.filter = selectedProject.name.toLowerCase()
+    sidebar.dataset.filter = selectedProject.ID
     currentTabLabel.textContent = selectedProject.name
 }
 function initProjectListener() {
@@ -99,13 +104,13 @@ function initProjects() {
     })
     initProjectListener()
 }
-function updateProjectTasksCounter(){
+function updateProjectTasksCounter() {
     const projects = Array.from(document.getElementsByClassName('project'))
-    projects.forEach(project=>{
+    projects.forEach(project => {
         const storedProject = Todo.Find.Project(project.dataset.id)
-        const taskCounter = project.getElementsByClassName('total-tasks-counter')[0]
+        const taskCounter = project.getElementsByClassName('total-tasks-counter')[ 0 ]
         taskCounter.textContent = 0
-        storedProject.tasks.forEach(task=>{
+        storedProject.tasks.forEach(task => {
             taskCounter.textContent = Number(taskCounter.textContent) + 1
         })
     })

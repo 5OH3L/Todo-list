@@ -2,7 +2,6 @@ import Todo from "./todo"
 import TaskUI from './todo-ui-tasks'
 import ProjectUI from './todo-ui-projects'
 import FilterUI from './todo-ui-task-filters'
-import projectUI from "./todo-ui-projects"
 
 function initPopups() {
     const taskInputContainer = document.getElementById('taskInputContainer')
@@ -108,6 +107,16 @@ function initTaskInputPopup() {
     const taskInputOverlay = document.getElementById('taskInputOverlay')
     taskInputOverlay.classList.add('taskInputOverlayTransiton')
 }
+function showManualSortOption() {
+    const manualOption = document.querySelector('#sort option[value="manual"]')
+    if (manualOption) manualOption.hidden = false
+}
+
+function hideManualSortOption() {
+    const manualOption = document.querySelector('#sort option[value="manual"]')
+    if (manualOption) manualOption.hidden = true
+}
+
 function init() {
     ProjectUI.init()
     initSidebarToggle()
@@ -123,6 +132,10 @@ const todoUI = {
         sidebar: initSidebarToggle,
         taskInput: initTaskInputPopup,
         popup:initPopups
+    },
+    manualSort: {
+        show: showManualSortOption,
+        hide: hideManualSortOption
     }
 }
 export default todoUI

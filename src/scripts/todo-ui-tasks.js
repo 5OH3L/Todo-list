@@ -210,13 +210,19 @@ function taskCheckListener(pointerEvent) {
     Todo.Save()
 }
 function taskDeleteListener(pointerEvent) {
+    const sidebar = document.getElementById('sidebar')
+    const projectsContainer = document.getElementById('all-projects-container')
     const task = pointerEvent.currentTarget
-    if (!task || !(pointerEvent.target.classList.contains('delete'))) return
+    if (!(pointerEvent.target.classList.contains('delete'))) return
     if (task.classList.contains('trashed')) {
         Message.confirm(task)
     } else {
         Todo.TrashTask(task.dataset.id)
-        FilterUI.load.selected()
+        if(sidebar.dataset.category === "filter"){
+            FilterUI.load.selected()
+        }else if(sidebar.dataset.category === "project"){
+            ProjectUI.load(projectsContainer.querySelector(`[data-id="${sidebar.dataset.filter}"]`))
+        }
         ProjectUI.refreshTaskCounter()
     }
 }
@@ -296,8 +302,11 @@ function initAllListeners() {
     initTaskCollapse()
 }
 function sortTasks(tasks, sortOption) {
-    if (["high", "medium", "low"].includes(sortOption)) {
-        const selectedPriority = { high: 3, medium: 2, low: 1 }[sortOption]
+    if (sortOption === "manual") {
+        return tasks
+    }
+    if ([ "high", "medium", "low" ].includes(sortOption)) {
+        const selectedPriority = { high: 3, medium: 2, low: 1 }[ sortOption ]
         return tasks.sort((a, b) => {
             if (a.priority === b.priority) {
                 return a.dueDateTime - b.dueDateTime

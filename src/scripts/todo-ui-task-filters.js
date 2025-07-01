@@ -6,6 +6,17 @@ function taskFilterListeners(filter) {
     const sidebar = document.getElementById('sidebar')
     filter = filter.currentTarget
     if (sidebar.dataset.filter === filter.dataset.filter) return
+
+    const sortSelect = document.getElementById('sort')
+    if (sortSelect) {
+        const currentSort = sortSelect.value
+        const manualOption = sortSelect.querySelector('option[value="manual"]')
+        if (manualOption) manualOption.hidden = true
+
+        if (currentSort === "manual") {
+            sortSelect.value = "due"
+        }
+    }
     sidebar.dataset.category = "filter"
     const filters = Array.from(document.getElementsByClassName('filtered-task'))
     const projects = Array.from(document.getElementsByClassName('project'))
@@ -47,21 +58,18 @@ function taskFilterListeners(filter) {
     currentTabCategory.textContent = "Tasks:"
     currentTabLabel.textContent = filter.dataset.filter
 }
-
 function initTaskFilterListeners() {
     const filters = Array.from(document.getElementsByClassName('filtered-task'))
     filters.forEach(filter => {
         filter.addEventListener('click', taskFilterListeners)
     })
 }
-
-
 function loadAllTasks() {
     const taskSection = document.getElementById('tasks-section')
     taskSection.innerHTML = ""
 
     const sortSelect = document.getElementById('sort')
-    const sortOption = sortSelect ? sortSelect.value : "due"
+    const sortOption = sortSelect.value
 
     let tasks = []
     Todo.Projects.forEach(project => {
@@ -69,7 +77,7 @@ function loadAllTasks() {
     })
 
     const sortedTasks = TaskUI.sort(tasks, sortOption)
-    sortedTasks.forEach(task =>{
+    sortedTasks.forEach(task => {
         TaskUI.load(task)
     })
 }
@@ -78,7 +86,7 @@ function loadCompletedTasks() {
     taskSection.innerHTML = ""
 
     const sortSelect = document.getElementById('sort')
-    const sortOption = sortSelect ? sortSelect.value : "due"
+    const sortOption = sortSelect.value
 
     let tasks = []
     Todo.Projects.forEach(project => {
@@ -88,8 +96,8 @@ function loadCompletedTasks() {
     })
 
     const sortedTasks = TaskUI.sort(tasks, sortOption)
-    sortedTasks.forEach(task =>{
-        TaskUI.load(task)
+    sortedTasks.forEach(task => {
+        TaskUI.load(task, true)
     })
 }
 function loadTodayTasks() {
@@ -97,7 +105,7 @@ function loadTodayTasks() {
     taskSection.innerHTML = ""
 
     const sortSelect = document.getElementById('sort')
-    const sortOption = sortSelect ? sortSelect.value : "due"
+    const sortOption = sortSelect.value
 
     let tasks = []
     Todo.Projects.forEach(project => {
@@ -107,7 +115,7 @@ function loadTodayTasks() {
     })
 
     const sortedTasks = TaskUI.sort(tasks, sortOption)
-    sortedTasks.forEach(task =>{
+    sortedTasks.forEach(task => {
         TaskUI.load(task)
     })
 }
@@ -116,7 +124,7 @@ function loadUpcomingTasks() {
     taskSection.innerHTML = ""
 
     const sortSelect = document.getElementById('sort')
-    const sortOption = sortSelect ? sortSelect.value : "due"
+    const sortOption = sortSelect.value
 
     let tasks = []
     Todo.Projects.forEach(project => {
@@ -126,7 +134,7 @@ function loadUpcomingTasks() {
     })
 
     const sortedTasks = TaskUI.sort(tasks, sortOption)
-    sortedTasks.forEach(task =>{
+    sortedTasks.forEach(task => {
         TaskUI.load(task)
     })
 }
@@ -135,7 +143,7 @@ function loadMissedTasks() {
     taskSection.innerHTML = ""
 
     const sortSelect = document.getElementById('sort')
-    const sortOption = sortSelect ? sortSelect.value : "due"
+    const sortOption = sortSelect.value
 
     let tasks = []
     Todo.Projects.forEach(project => {
@@ -145,7 +153,7 @@ function loadMissedTasks() {
     })
 
     const sortedTasks = TaskUI.sort(tasks, sortOption)
-    sortedTasks.forEach(task =>{
+    sortedTasks.forEach(task => {
         TaskUI.load(task)
     })
 }
@@ -154,7 +162,7 @@ function loadTrashedTasks() {
     taskSection.innerHTML = ""
 
     const sortSelect = document.getElementById('sort')
-    const sortOption = sortSelect ? sortSelect.value : "due"
+    const sortOption = sortSelect.value
 
     let tasks = []
     Todo.Trash.forEach(task => {
@@ -162,7 +170,7 @@ function loadTrashedTasks() {
     })
 
     const sortedTasks = TaskUI.sort(tasks, sortOption)
-    sortedTasks.forEach(task =>{
+    sortedTasks.forEach(task => {
         TaskUI.load(task, true)
     })
 }
