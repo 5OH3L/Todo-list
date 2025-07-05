@@ -2,10 +2,10 @@ import iconTaskDelete from '../icons/iconCross.svg'
 import iconTaskReOrder from '../icons/iconHorizontalDrag.svg'
 import FilterUI from './todo-ui-task-filters'
 import ProjectUI from './todo-ui-projects'
-import Message from './todo-ui-message'
+import MessageUI from './todo-ui-message'
 import Todo from './todo'
 
-function loadTask(task, includeCompleted = false) {
+function loadTask(task, includeCompleted = false, disableDrag = false) {
     const taskSection = document.getElementById('tasks-section')
     const taskContainer = document.createElement('div')
     if (task.isChecked && !includeCompleted) return
@@ -13,6 +13,15 @@ function loadTask(task, includeCompleted = false) {
     if (task.isChecked) { taskContainer.classList.add('checked') }
     taskContainer.classList.add('task')
     if (task.isTrashed) { taskContainer.classList.add('trashed') }
+
+    taskContainer.addEventListener('dragstart', () => {
+        taskContainer.classList.add('dragging')
+        taskContainer.style.animation = 'none'
+    })
+    taskContainer.addEventListener('dragend', () => {
+        taskContainer.classList.remove('dragging')
+        taskContainer.removeAttribute('style')
+    })
 
     const taskDetails = document.createElement('div')
     taskDetails.classList.add('details')
@@ -183,14 +192,26 @@ function loadTask(task, includeCompleted = false) {
     taskDeleteButtonIcon.alt = "Cross Icon"
     taskDeleteButton.appendChild(taskDeleteButtonIcon)
 
-    const taskReOrderButton = document.createElement('button')
-    taskReOrderButton.classList.add('re-order')
-    taskActions.appendChild(taskReOrderButton)
+    if (disableDrag) { } else {
+        const taskReOrderButton = document.createElement('button')
+        taskReOrderButton.classList.add('re-order')
+        taskActions.appendChild(taskReOrderButton)
 
-    const taskReOrderButtonIcon = document.createElement('img')
-    taskReOrderButtonIcon.src = iconTaskReOrder
-    taskReOrderButtonIcon.alt = "Horizontal Drag Icon"
-    taskReOrderButton.appendChild(taskReOrderButtonIcon)
+        taskReOrderButton.addEventListener('mousedown', () => {
+            taskContainer.setAttribute('draggable', true)
+        })
+        taskReOrderButton.addEventListener('mouseup', () => {
+            taskContainer.removeAttribute('draggable')
+        })
+        taskReOrderButton.addEventListener('mouseleave', () => {
+            taskContainer.removeAttribute('draggable')
+        })
+
+        const taskReOrderButtonIcon = document.createElement('img')
+        taskReOrderButtonIcon.src = iconTaskReOrder
+        taskReOrderButtonIcon.alt = "Horizontal Drag Icon"
+        taskReOrderButton.appendChild(taskReOrderButtonIcon)
+    }
 
     taskSection.appendChild(taskContainer)
 }
@@ -215,13 +236,14 @@ function taskDeleteListener(pointerEvent) {
     const task = pointerEvent.currentTarget
     if (!(pointerEvent.target.classList.contains('delete'))) return
     if (task.classList.contains('trashed')) {
-        Message.confirm(task)
+        MessageUI.confirm.delete(null, task)
     } else {
         Todo.TrashTask(task.dataset.id)
-        if(sidebar.dataset.category === "filter"){
+        if (sidebar.dataset.category === "filter") {
             FilterUI.load.selected()
-        }else if(sidebar.dataset.category === "project"){
-            ProjectUI.load(projectsContainer.querySelector(`[data-id="${sidebar.dataset.filter}"]`))
+        } else if (sidebar.dataset.category === "project") {
+            console.log(projectsContainer.querySelector(`[data-id="${sidebar.dataset.filter}"]`))
+            ProjectUI.load(projectsContainer.querySelector(`[data-id="${sidebar.dataset.filter}"]`), true)
         }
         ProjectUI.refreshTaskCounter()
     }
@@ -319,6 +341,43 @@ function sortTasks(tasks, sortOption) {
         return tasks.sort((a, b) => a.dueDateTime - b.dueDateTime)
     }
     return tasks
+}
+// Drag-ang-drop
+const tasksContainer = document.getElementById('tasks-section')
+tasksContainer.addEventListener('dragover', e => {
+    e.preventDefault()
+    e.dataTransfer.dropEffect = 'move'
+    const afterElement = getDragAfterElement(e.clientY)
+    const dragging = document.getElementsByClassName('task dragging')[ 0 ]
+    const sidebar = document.getElementById('sidebar')
+    const sort = document.getElementById('sort')
+    const allTasks = [ ...tasksContainer.getElementsByClassName('task') ]
+    if (((afterElement == null && allTasks.indexOf(dragging) !== allTasks.length - 1) || (afterElement !== dragging.nextElementSibling && afterElement != null)) && allTasks.length > 1) {
+        if (afterElement == null) { tasksContainer.appendChild(dragging) } else { tasksContainer.insertBefore(dragging, afterElement) }
+        if (sidebar.dataset.category === "project" && sort.value === "manual") {
+            const selectedProject = Todo.Find.Project(sidebar.dataset.filter)
+            const updatedAllTasks = [ ...tasksContainer.getElementsByClassName('task') ]
+            selectedProject.tasks = updatedAllTasks.map(taskElement => {
+                return Todo.Find.Task(taskElement.dataset.id)
+            })
+            Todo.Save()
+        }
+        if (sidebar.dataset.category === "filter") { sort.value = "manual" }
+        if (sidebar.dataset.category === "project" && sort.value === "manual") { }
+    }
+})
+
+function getDragAfterElement(y) {
+    const draggableElements = [ ...tasksContainer.querySelectorAll('.task:not(.dragging)') ]
+    return draggableElements.reduce((closest, element) => {
+        const box = element.getBoundingClientRect()
+        const offset = y - box.top - (box.height / 2)
+        if (offset < 0 && offset > closest.offset) {
+            return { offset, element }
+        } else {
+            return closest
+        }
+    }, { offset: Number.NEGATIVE_INFINITY }).element
 }
 
 

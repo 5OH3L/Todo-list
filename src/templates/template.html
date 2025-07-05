@@ -52,10 +52,14 @@
                     <button id="project-dropdown-button">
                         <h2>Projects</h2>
                         <div class="project-actions">
-                            <div id="add-project" class="add-project" title="Create Project"><img src="../icons/iconCreateProject.svg" alt="Create Projet Icon" class="icon"></div>
-                            <div class="caret" title="Hide All Projects"><img src="../icons/iconProjectDropdown.svg" alt="Projet Drop-down Icon" class="icon"></div>
+                            <div id="add-project" class="add-project" title="Create Project"><img src="../icons/iconCreateProject.svg" alt="Create Projet Icon" class="add-project-icon icon"></div>
+                            <div class="caret" title="Hide All Projects"><img src="../icons/iconProjectDropdown.svg" alt="Projet Drop-down Icon" class="projects-toggle-icon icon"></div>
                         </div>
                     </button>
+                </div>
+                <div id="project-actions">
+                        <button id="project-actions-edit">Edit</button>
+                        <button id="project-actions-delete">Delete</button>
                 </div>
                 <div id="all-projects-container">
                     <div class="project">
@@ -73,12 +77,13 @@
             </header>
             <main id="main">
                 <section id="sort-section">
+                    <button id="delete-all-tasks" style="display: none;">Delete All</button>
                     <label for="sort">Sort By:</label>
                     <select name="sort" id="sort">
-                        <option value="high">High Priority</option>
+                        <option value="high" selected>High Priority</option>
                         <option value="medium">Medium Priority</option>
                         <option value="low">Low Priority</option>
-                        <option value="due" selected>Due Date</option>
+                        <option value="due">Due Date</option>
                         <option value="manual" hidden>Manual</option>
                     </select>
                 </section>
@@ -234,6 +239,24 @@
                 <div id="projectInputActions">
                     <button id="projectInputCancel">Cancel</button>
                     <button id="projectInputCreate">Create</button>
+                </div>
+            </div>
+        </div>
+        <div id="projectEditContainer" class="displayNone">
+            <div id="projectEditOverlay"></div>
+            <div id="projectEdit">
+                <h2 id="projectEditHeading">Edit Project Details</h2>
+                <div id="projectEditNameContainer">
+                    <label for="projectEditName" id="projectEditNameLabel">Name:</label>
+                    <input type="text" id="projectEditName">
+                </div>
+                <div id="projectEditColorContainer">
+                    <label for="projectEditColor" id="projectEditColorLabel">Color:</label>
+                    <input type="color" id="projectEditColor" value="#FFFFFF">
+                </div>
+                <div id="projectEditActions">
+                    <button id="projectEditCancel">Cancel</button>
+                    <button id="projectEditConfirm">Confirm</button>
                 </div>
             </div>
         </div>

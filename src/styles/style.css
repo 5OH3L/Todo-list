@@ -36,6 +36,10 @@
     --quaternary-font-family: Roboto, 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
+body {
+    user-select: none;
+}
+
 /* Layout */
 #content {
     display: flex;
@@ -69,7 +73,7 @@
     text-align: center;
     color: var(--primary-text-color);
     font-family: var(--primary-font-family);
-    font-weight: bold;
+    font-weight: 500;
     background-color: var(--primary-background-color);
     gap: 1rem;
     overflow-x: hidden;
@@ -358,6 +362,12 @@
     height: 1.4rem;
     width: 1.4rem;
 }
+.projects-toggle-icon{
+    transition: transform 0.5s ease;
+}
+.projects-toggle-icon.collapsed{
+    transform: rotate(180deg);
+}
 
 #all-projects-container {
     display: flex;
@@ -366,6 +376,9 @@
     align-items: center;
     gap: 1rem;
     width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    transition: max-height 0.5s ease;
 }
 
 .project {
@@ -376,6 +389,7 @@
     background-color: #333333;
     padding: 0.4rem 0.5rem;
     border-radius: 0.2rem;
+    white-space: nowrap;
     transition: background-color 0.2s ease;
 }
 
@@ -1314,6 +1328,7 @@
     font-weight: bold;
     font-family: var(--primary-font-family);
     cursor: pointer;
+    user-select: none;
     transition: transform 0.3s ease;
 }
 
@@ -1329,4 +1344,219 @@
 
 #content .displayNone {
     display: none;
+}
+/* Project Edit */
+#projectEditContainer {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none;
+    user-select: none;
+    color: white;
+}
+
+#projectEditOverlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(0.1rem);
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+#projectEditContainer.visible>#projectEditOverlay {
+    pointer-events: all;
+    opacity: 1;
+}
+
+#projectEdit {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 50svh;
+    width: 70svh;
+    backdrop-filter: blur(0.2rem);
+    pointer-events: all;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    z-index: 10;
+    padding: 1rem;
+    transform: translateY(-200%);
+    opacity: 0;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+#projectEditContainer.visible>#projectEdit {
+    pointer-events: all;
+    user-select: text;
+    opacity: 1;
+    transform: translateY(0%);
+}
+
+#projectEditHeading {
+    font-family: var(--primary-font-family);
+    font-size: 2rem;
+}
+
+#projectEditNameLabel,
+#projectEditColorLabel {
+    font-family: var(--tertiary-font-family);
+    font-size: 1.7rem;
+    width: 35%;
+}
+
+#projectEdit>*:not(#projectEditHeading, #projectEditActions) {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+}
+
+#projectEditName,
+#projectEditColor {
+    border: none;
+    outline: none;
+    background: none;
+    width: 100%;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 0.4rem;
+}
+
+#projectEditName {
+    height: 70%;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: inherit;
+    font-size: 1.4rem;
+    padding: 0.6rem;
+}
+
+#projectEditColor {
+    height: 105%;
+    width: 105%;
+    appearance: none;
+    cursor: pointer;
+}
+
+#projectEditActions {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#projectEditCancel,
+#projectEditConfirm {
+    border: none;
+    outline: none;
+    background: none;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 2px solid rgba(0, 0, 0, 0.5);
+    padding: 0.4rem 0.8rem;
+    width: 30%;
+    border-radius: 0.4rem;
+    font-size: 1rem;
+    font-weight: bold;
+    font-family: var(--primary-font-family);
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.3s ease;
+}
+
+#projectEditCancel:hover,
+#projectEditConfirm:hover {
+    transform: scale(1.1);
+}
+
+#projectEditCancel:active,
+#projectEditConfirm:active {
+    transform: scale(1.05);
+}
+
+#content .displayNone {
+    display: none;
+}
+
+/* Delete All Tasks Button */
+#delete-all-tasks {
+    margin-right: auto;
+    background: none;
+    border: none;
+    outline: none;
+    font-size: inherit;
+    font-weight: bold;
+    background-color: rgba(255, 0, 0, 0.8);
+    color: white;
+    padding: 0.5rem 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 0.4rem;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+#delete-all-tasks.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+
+#delete-all-tasks:hover {
+    transform: scale(1.1);
+}
+
+#delete-all-tasks:active {
+    transform: scale(1.05);
+}
+
+/* Project Actions */
+#project-actions {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    height: 6rem;
+    width: 7rem;
+    background-color: hsl(240, 5%, 14%);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 0.2rem;
+    padding: 0.4rem;
+    font-size: inherit;
+    font-weight: inherit;
+}
+#project-actions.active{
+    display: flex;
+}
+
+#project-actions>button {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    width: 100%;
+    padding: 0.4rem;
+    background-color: hsl(240, 5%, 16%);
+    cursor: pointer;
+    border-radius: 0.2rem;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+#project-actions>button:hover {
+    background-color: hsl(240, 5%, 20%);
+}
+
+#project-actions>button:active {
+    transform: scale(0.96);
+}
+
+/* Drag-and-drop */
+.task.dragging {
+    opacity: 0.5;
 }

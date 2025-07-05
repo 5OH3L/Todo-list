@@ -74,7 +74,6 @@ function loadFromLocalStorage() {
     }
 }
 
-
 class Project {
     constructor(name, color) {
         this.name = name
@@ -113,7 +112,6 @@ function addTaskToTheProject(title, description, note, priority, dueDateTime, pr
     project.tasks.push(createTask(title, description, note, priority, dueDateTime, projectID))
     saveToLocalStorage()
 }
-
 function findProject(ID) {
     const project = Projects.find(project => project.ID === ID)
     if (project) {
@@ -146,6 +144,10 @@ function deleteTask(ID) {
         const taskIndex = Trash.indexOf(task)
         Trash.splice(taskIndex, 1)
     }
+    saveToLocalStorage()
+}
+function deleteAllTrashedTasks(){
+    Trash.length = 0
     saveToLocalStorage()
 }
 function moveTask(taskId, projectID) {
@@ -189,7 +191,8 @@ const Todo = {
     },
     Delete: {
         Project: deleteProject,
-        Task: deleteTask
+        Task: deleteTask,
+        Trashed: deleteAllTrashedTasks
     },
     Projects,
     Trash,

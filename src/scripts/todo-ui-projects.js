@@ -9,6 +9,20 @@ function loadProjects() {
         DOMProject.classList.add('project')
         DOMProject.dataset.id = project.ID
         DOMProject.dataset.title = project.name
+        DOMProject.addEventListener('click', () => { if (DOMProject.dataset.id !== document.getElementById('sidebar').dataset.filter) { document.getElementById('sort').value = 'manual' } })
+        DOMProject.addEventListener('contextmenu', e =>{
+            e.preventDefault()
+            if(DOMProject.dataset.id === Todo.Projects[0].ID){}else{
+                const projectActions = document.getElementById('project-actions')
+                projectActions.classList.add('active')
+                const topPosition = (e.clientY - projectActions.clientHeight)
+                const leftPosition = e.clientX
+                projectActions.style.top = topPosition + "px"
+                projectActions.style.left = leftPosition + "px"
+                projectActions.dataset.projecttitle = DOMProject.dataset.title
+                projectActions.dataset.projectid = DOMProject.dataset.id
+            }
+        })
         projectsContainer.appendChild(DOMProject)
 
         const DOMProjectLabelColor = document.createElement('div')
@@ -30,7 +44,9 @@ function loadProjects() {
 function loadSelectedProjectTasks(DOMProject, force = false) {
     if (DOMProject instanceof PointerEvent) { DOMProject = DOMProject.currentTarget }
     const sidebar = document.getElementById('sidebar')
-    if ((sidebar.dataset.filter === DOMProject.dataset.title.toLowerCase()) && !force) return
+    if ((sidebar.dataset.filter === DOMProject.dataset.id) && !force) return
+    const deleteAllTasksButton = document.getElementById('delete-all-tasks')
+    deleteAllTasksButton.classList.remove('visible')
 
     const allProjects = Array.from(document.getElementsByClassName('project'))
     allProjects.forEach(project => { if (project.classList.contains('selected')) { project.classList.remove('selected') } })
@@ -45,21 +61,20 @@ function loadSelectedProjectTasks(DOMProject, force = false) {
     })
     sidebar.dataset.category = 'project'
     const selectedProject = Todo.Find.Project(DOMProject.dataset.id)
-
     const sortSelect = document.getElementById('sort')
-    sortSelect.value = "manual"
+    const sortOption = sortSelect.value
     if (sortSelect) {
         const manualOption = sortSelect.querySelector('option[value="manual"]')
         if (manualOption) manualOption.hidden = false
     }
-    const sortOption = sortSelect ? sortSelect.value : "due"
+    const disableDrag = sortOption !== "manual" ? true : false
 
     let tasks = []
     selectedProject.tasks.forEach(task => { tasks.push(task) })
 
     const sortedTasks = TaskUI.sort(tasks, sortOption)
     sortedTasks.forEach(task => {
-        TaskUI.load(task, true)
+        TaskUI.load(task, true, disableDrag)
     })
 
     TaskUI.init.listeners.all()
@@ -73,7 +88,6 @@ function initProjectListener() {
         DOMProject.addEventListener('click', loadSelectedProjectTasks)
     })
 }
-
 function initProjects() {
     loadProjects()
     const addProjectButton = document.getElementById('add-project')
@@ -92,15 +106,16 @@ function initProjects() {
         if (projectInputName.value.trim() === '') {
             alert("Project name can't be empty!")
             return
+        }else{
+            const inputName = projectInputName.value
+            const inputColor = projectInputColor.value
+            projectInputName.value = ''
+            projectInputColor.value = "#ffffff"
+            projectInputContainer.classList.remove('visible')
+            Todo.AddProject(inputName, inputColor)
+            loadProjects()
+            initProjectListener()
         }
-        const inputName = projectInputName.value
-        const inputColor = projectInputColor.value
-        projectInputName.value = ''
-        projectInputColor.value = "#ffffff"
-        projectInputContainer.classList.remove('visible')
-        Todo.AddProject(inputName, inputColor)
-        loadProjects()
-        initProjectListener()
     })
     initProjectListener()
 }

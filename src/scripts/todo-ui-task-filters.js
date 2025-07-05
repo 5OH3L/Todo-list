@@ -1,5 +1,7 @@
-import TaskUI from './todo-ui-tasks'
 import Todo from "./todo"
+import TaskUI from './todo-ui-tasks'
+import TodoUI from './todo-ui'
+import MessageUI from './todo-ui-message'
 
 
 function taskFilterListeners(filter) {
@@ -10,11 +12,10 @@ function taskFilterListeners(filter) {
     const sortSelect = document.getElementById('sort')
     if (sortSelect) {
         const currentSort = sortSelect.value
-        const manualOption = sortSelect.querySelector('option[value="manual"]')
-        if (manualOption) manualOption.hidden = true
+        TodoUI.manualSort.hide()
 
         if (currentSort === "manual") {
-            sortSelect.value = "due"
+            sortSelect.value = "high"
         }
     }
     sidebar.dataset.category = "filter"
@@ -28,6 +29,10 @@ function taskFilterListeners(filter) {
     projects.forEach(project => {
         project.classList.remove('selected')
     })
+
+    const deleteAllTasksButton = document.getElementById('delete-all-tasks')
+    deleteAllTasksButton.classList.remove('visible')
+    
     filter.classList.add('selected')
     if (filter.dataset.filter === "all") {
         sidebar.dataset.filter = "all"
@@ -63,6 +68,17 @@ function initTaskFilterListeners() {
     filters.forEach(filter => {
         filter.addEventListener('click', taskFilterListeners)
     })
+}
+function initDeleteAllTaskButtonListeners(){
+    const deleteAllTasksButton = document.getElementById('delete-all-tasks')
+    deleteAllTasksButton.removeAttribute('style')
+    deleteAllTasksButton.addEventListener('click', ()=>{
+        MessageUI.confirm.allTrashedTask()
+    })
+}
+function initAllListeners(){
+    initTaskFilterListeners()
+    initDeleteAllTaskButtonListeners()
 }
 function loadAllTasks() {
     const taskSection = document.getElementById('tasks-section')
@@ -161,6 +177,9 @@ function loadTrashedTasks() {
     const taskSection = document.getElementById('tasks-section')
     taskSection.innerHTML = ""
 
+    const deleteAllTasksButton = document.getElementById('delete-all-tasks')
+    deleteAllTasksButton.classList.add('visible')
+
     const sortSelect = document.getElementById('sort')
     const sortOption = sortSelect.value
 
@@ -176,7 +195,8 @@ function loadTrashedTasks() {
 }
 function loadSelectedFilterTasks() {
     const sidebar = document.getElementById('sidebar')
-    if (sidebar.dataset.filter === "all") { loadAllTasks() }
+    
+    if (sidebar.dataset.filter === "all") { loadAllTasks()}
     else if (sidebar.dataset.filter === "completed") { loadCompletedTasks() }
     else if (sidebar.dataset.filter === "today") { loadTodayTasks() }
     else if (sidebar.dataset.filter === "upcoming") { loadUpcomingTasks() }
@@ -194,7 +214,7 @@ const todoTaskFilter = {
         trash: loadTrashedTasks
     },
     init: {
-        listeners: initTaskFilterListeners
+        listeners: initAllListeners
     }
 }
 export default todoTaskFilter
