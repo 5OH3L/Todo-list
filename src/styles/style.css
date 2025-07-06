@@ -5,8 +5,8 @@
 }
 
 @font-face {
-    font-family: 'inter-bold';
-    src: url("../fonts/inter/Inter_28pt-Bold.ttf")
+    font-family: 'inter-medium';
+    src: url("../fonts/inter/Inter_28pt-Medium.ttf")
 }
 
 @font-face {
@@ -30,7 +30,7 @@
     --primary-background-color: #1C1C1E;
     --sidebar-padding: 0 0.4rem;
     --primary-text-color: #ECECEC;
-    --primary-font-family: 'inter-bold', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    --primary-font-family: 'inter-medium', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     --secondary-font-family: 'montserrat-bold', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     --tertiary-font-family: 'inter-regular', 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     --quaternary-font-family: Roboto, 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -227,8 +227,9 @@ body {
     border: none;
     color: black;
     font-family: inherit;
-    font-weight: inherit;
+    font-weight:600;
     width: 100%;
+    letter-spacing: 0.1rem;
     background-color: #5D9FEB;
     padding: 0.5rem 0;
     font-size: 1rem;
@@ -464,7 +465,7 @@ body {
     background-color: #212121;
     color: white;
     text-align: center;
-    font-weight: bold;
+    font-weight: 500;
     font-family: inherit;
     cursor: pointer;
     padding: 0.3rem;
