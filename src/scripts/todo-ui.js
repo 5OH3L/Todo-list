@@ -72,7 +72,8 @@ function initSidebarToggle() {
     })
 }
 function initTaskInputPopup() {
-    const filtersContainer = document.getElementById('filtered-tasks')
+    const sidebar = document.getElementById('sidebar')
+    const projectsContainer = document.getElementById('all-projects-container')
     const showAddTaskButton = document.getElementById('button-add-task')
     const taskInputContainer = document.getElementById('taskInputContainer')
     const taskInputTitle = document.getElementById('taskInputTitle')
@@ -128,8 +129,8 @@ function initTaskInputPopup() {
             if (input.id === "taskInputPriority") { } else { input.value = '' }
         })
         taskInputContainer.classList.remove('visible')
-        if (filtersContainer.dataset.filter === '') {
-            ProjectUI.load()
+        if (sidebar.dataset.category === 'project') {
+            ProjectUI.load(projectsContainer.querySelector(`[data-id="${sidebar.dataset.filter}"]`),true)
         } else {
             FilterUI.load.selected()
         }
