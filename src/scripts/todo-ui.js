@@ -37,7 +37,7 @@ function initPopups() {
             const selectedProject = Todo.Find.Project(projectActions.dataset.projectid)
             selectedProject.name = projectEditName.value
             selectedProject.color = projectEditColor.value
-            ProjectUI.init()
+            ProjectUI.init.projects()
             projectEditColor.removeAttribute('value')
             projectActions.removeAttribute('data-projecttitle')
             projectActions.removeAttribute('data-projectid')
@@ -192,7 +192,8 @@ function hideManualSortOption() {
 }
 
 function init() {
-    ProjectUI.init()
+    ProjectUI.init.projects()
+    ProjectUI.init.inputListeners()
     initSidebarToggle()
     initTaskInputPopup()
     initSortListener()

@@ -33,12 +33,13 @@ function messageConfirmListener() {
             FilterUI.load.selected()
         }
         Todo.Delete.Project(projetcID)
-        ProjectUI.init()
+        ProjectUI.init.projects()
         taskMessageContainer.removeAttribute('data-category')
         taskMessageContainer.removeAttribute('data-id')
     } else {
         Todo.Delete.Task(taskMessageContainer.dataset.taskid)
         FilterUI.load.selected()
+        taskMessageContainer.removeAttribute('data-taskid')
     }
 }
 function initmessageConfirmListener() {
@@ -52,6 +53,7 @@ function showConfirmationMessage(message, task = null, project = null) {
     if (task) {
         const taskTitleText = task.getElementsByClassName('title-text')[ 0 ].textContent
         taskMessage.textContent = `Task: "${taskTitleText}" will be deleted permanently.`
+        taskMessageContainer.setAttribute('data-taskid', task.dataset.id)
     } else {
         if (project) {
             taskMessageContainer.setAttribute('data-category', "project")

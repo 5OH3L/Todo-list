@@ -1,6 +1,13 @@
 import TaskUI from "./todo-ui-tasks"
 import Todo from "./todo"
 
+const addProjectButton = document.getElementById('add-project')
+const projectInputContainer = document.getElementById('projectInputContainer')
+const projectInputName = document.getElementById('projectInputName')
+const projectInputColor = document.getElementById('projectInputColor')
+const projectInputCancelButton = document.getElementById('projectInputCancel')
+const projectInputCreateButton = document.getElementById('projectInputCreate')
+
 function loadProjects() {
     const projectsContainer = document.getElementById('all-projects-container')
     projectsContainer.innerHTML = ''
@@ -10,9 +17,9 @@ function loadProjects() {
         DOMProject.dataset.id = project.ID
         DOMProject.dataset.title = project.name
         DOMProject.addEventListener('click', () => { if (DOMProject.dataset.id !== document.getElementById('sidebar').dataset.filter) { document.getElementById('sort').value = 'manual' } })
-        DOMProject.addEventListener('contextmenu', e =>{
+        DOMProject.addEventListener('contextmenu', e => {
             e.preventDefault()
-            if(DOMProject.dataset.id === Todo.Projects[0].ID){}else{
+            if (DOMProject.dataset.id === Todo.Projects[ 0 ].ID) { } else {
                 const projectActions = document.getElementById('project-actions')
                 projectActions.classList.add('active')
                 const topPosition = (e.clientY - projectActions.clientHeight)
@@ -88,14 +95,7 @@ function initProjectListener() {
         DOMProject.addEventListener('click', loadSelectedProjectTasks)
     })
 }
-function initProjects() {
-    loadProjects()
-    const addProjectButton = document.getElementById('add-project')
-    const projectInputContainer = document.getElementById('projectInputContainer')
-    const projectInputName = document.getElementById('projectInputName')
-    const projectInputColor = document.getElementById('projectInputColor')
-    const projectInputCancelButton = document.getElementById('projectInputCancel')
-    const projectInputCreateButton = document.getElementById('projectInputCreate')
+function initProjectInputListeners() {
     addProjectButton.addEventListener('click', () => {
         projectInputContainer.classList.add('visible')
     })
@@ -106,17 +106,19 @@ function initProjects() {
         if (projectInputName.value.trim() === '') {
             alert("Project name can't be empty!")
             return
-        }else{
+        } else {
             const inputName = projectInputName.value
             const inputColor = projectInputColor.value
             projectInputName.value = ''
             projectInputColor.value = "#ffffff"
             projectInputContainer.classList.remove('visible')
             Todo.AddProject(inputName, inputColor)
-            loadProjects()
-            initProjectListener()
+            initProjects()
         }
     })
+}
+function initProjects() {
+    loadProjects()
     initProjectListener()
 }
 function updateProjectTasksCounter() {
@@ -125,7 +127,7 @@ function updateProjectTasksCounter() {
         const storedProject = Todo.Find.Project(project.dataset.id)
         const taskCounter = project.getElementsByClassName('total-tasks-counter')[ 0 ]
         taskCounter.textContent = 0
-        storedProject.tasks.forEach(task => {
+        storedProject.tasks.forEach(() => {
             taskCounter.textContent = Number(taskCounter.textContent) + 1
         })
     })
@@ -133,7 +135,10 @@ function updateProjectTasksCounter() {
 
 
 const projectUI = {
-    init: initProjects,
+    init: {
+        projects: initProjects,
+        inputListeners: initProjectInputListeners
+    },
     refreshTaskCounter: updateProjectTasksCounter,
     load: loadSelectedProjectTasks
 }

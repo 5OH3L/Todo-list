@@ -1250,6 +1250,7 @@ body {
     backdrop-filter: blur(0.2rem);
     pointer-events: all;
     border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 0.4rem;
     z-index: 10;
     padding: 1rem;
     transform: translateY(-200%);
@@ -1386,6 +1387,7 @@ body {
     backdrop-filter: blur(0.2rem);
     pointer-events: all;
     border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 0.4rem;
     z-index: 10;
     padding: 1rem;
     transform: translateY(-200%);
